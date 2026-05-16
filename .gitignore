@@ -40,6 +40,9 @@
 # Cursor
 .cursor/
 
+# idea
+.idea/
+
 # Gradle cache directory
 .gradle/
 
