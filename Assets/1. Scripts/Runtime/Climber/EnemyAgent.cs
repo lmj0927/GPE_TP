@@ -15,10 +15,7 @@ public class EnemyAgent : Agent
 
     [SerializeField] private ClimberMovementConfig _config;
     [SerializeField] private Transform _groundCheckOrigin;
-    //[SerializeField] private AStarPlanner _planner;
     [SerializeField] private float _horizontalDeadZone = 0.15f;
-    [SerializeField] private float _replanInterval = 1.5f;
-    [SerializeField] private bool _pollKeyboardInput = true;
 
     private Rigidbody2D _rigidbody;
     private ClimberMotor _motor;
@@ -26,7 +23,6 @@ public class EnemyAgent : Agent
     private ClimberStateMachine _stateMachine;
     private ClimberMoveInput _moveInput;
     private bool _isInvincible;
-    private float _replanTimer;
     private int _jumpBufferFrames;
 
     public ClimberStateId CurrentState => _stateMachine.CurrentId;
@@ -58,7 +54,6 @@ public class EnemyAgent : Agent
     public override void OnEpisodeBegin()
     {
         _moveInput = ClimberMoveInput.Zero;
-        _replanTimer = 0f;
         _isInvincible = false;
         _jumpBufferFrames = 0;
 
@@ -89,15 +84,12 @@ public class EnemyAgent : Agent
         if (_stateMachine.CurrentId == ClimberStateId.HitStun)
             return;
 
-        if (_pollKeyboardInput)
-            return;
-
         _moveInput = ToMoveInput(actions);
     }
 
     private void Update()
     {
-        if (_pollKeyboardInput && _stateMachine.CurrentId != ClimberStateId.HitStun)
+        if ( _stateMachine.CurrentId != ClimberStateId.HitStun)
             _moveInput = ReadKeyboardInput();
 
         _stateMachine.Tick(_moveInput);
