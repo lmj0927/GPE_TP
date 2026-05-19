@@ -36,9 +36,14 @@ public class EnemyAgent : Agent
 
     private Vector2 _observationOrigin;
     private float _bestY;
-    private float _previousGoalDistanceY;
+    private float _lastLandingY;
+    private float _bestDistToGoal;
+    private int _lastLandingPlatformInstanceId;
     private int _platformLandingsThisEpisode;
     private bool _skipNextEpisodeStatsReport = true;
+    private int _stallPlatformInstanceId;
+    private float _platformStallElapsed;
+    private float _lastPlatformStallSampleTime;
 
     public ClimberStateId CurrentState => _stateMachine.CurrentId;
 
@@ -110,7 +115,10 @@ public class EnemyAgent : Agent
 
         _observationOrigin = _startPoint != null ? (Vector2)_startPoint.position : (Vector2)transform.position;
         _bestY = transform.position.y;
-        _previousGoalDistanceY = ComputeGoalDistanceY();
+        _lastLandingY = _bestY;
+        _bestDistToGoal = GetDistanceToGoal();
+        _lastLandingPlatformInstanceId = 0;
+        ResetPlatformStallTracking();
 
         _groundChecker.Refresh();
         var startState = _groundChecker.IsGrounded ? ClimberStateId.Grounded : ClimberStateId.Airborne;
@@ -197,42 +205,46 @@ public class EnemyAgent : Agent
             return;
 
         _groundChecker.Refresh();
-        ApplyGoalDistanceYShaping();
-        ApplyPlatformIdlePenalty();
+        ApplyPlatformStallPenalty();
     }
 
-    private void ApplyGoalDistanceYShaping()
+    private void ResetPlatformStallTracking()
     {
-        float goalDistanceY = ComputeGoalDistanceY();
-        float threshold = _rewardWeights.GoalDistanceYThreshold;
-
-        if (goalDistanceY < _previousGoalDistanceY - threshold)
-            AddReward(_rewardWeights.GoalApproachRewardPerDecision);
-        else if (goalDistanceY > _previousGoalDistanceY + threshold)
-            AddReward(_rewardWeights.GoalRecedePenaltyPerDecision);
-
-        _previousGoalDistanceY = goalDistanceY;
+        _stallPlatformInstanceId = 0;
+        _platformStallElapsed = 0f;
+        _lastPlatformStallSampleTime = Time.time;
     }
 
-    private void ApplyPlatformIdlePenalty()
+    private void ApplyPlatformStallPenalty()
     {
-        if (_rewardWeights.PlatformIdlePenaltyPerDecision == 0f)
+        if (_rewardWeights.PlatformStallPenaltyPerDecision == 0f)
             return;
 
-        float y = transform.position.y;
-        float minDelta = _rewardWeights.MinLandingHeightDelta;
-        if (!_groundChecker.IsGrounded || Mathf.Abs(y - _bestY) > minDelta)
+        if (!_groundChecker.IsGrounded)
             return;
 
-        AddReward(_rewardWeights.PlatformIdlePenaltyPerDecision);
-    }
+        var platform = _groundChecker.CurrentPlatform;
+        if (platform == null)
+            return;
 
-    private float ComputeGoalDistanceY()
-    {
-        if (_goalPoint == null)
-            return 0f;
+        int platformId = platform.GetInstanceID();
+        float now = Time.time;
 
-        return _goalPoint.position.y - transform.position.y;
+        if (platformId != _stallPlatformInstanceId)
+        {
+            _stallPlatformInstanceId = platformId;
+            _platformStallElapsed = 0f;
+            _lastPlatformStallSampleTime = now;
+            return;
+        }
+
+        _platformStallElapsed += now - _lastPlatformStallSampleTime;
+        _lastPlatformStallSampleTime = now;
+
+        if (_platformStallElapsed < _rewardWeights.PlatformStallTimeSeconds)
+            return;
+
+        AddReward(_rewardWeights.PlatformStallPenaltyPerDecision);
     }
 
     public void ChangeState(ClimberStateId stateId)
@@ -249,23 +261,67 @@ public class EnemyAgent : Agent
         if (_rewardWeights == null)
             return;
 
+        _groundChecker.Refresh();
+        int landingPlatformId = _groundChecker.CurrentPlatform != null
+            ? _groundChecker.CurrentPlatform.GetInstanceID()
+            : 0;
+
         float landingY = transform.position.y;
         float minDelta = _rewardWeights.MinLandingHeightDelta;
 
         if (landingY > _bestY + minDelta)
         {
             _bestY = landingY;
+            _lastLandingY = landingY;
             AddReward(_rewardWeights.PlatformLandingReward);
             _platformLandingsThisEpisode++;
             RecordStat("Environment/PlatformLanding", 1f, StatAggregationMethod.Sum);
-            return;
+            Debug.Log("[EnemyAgent] Higher platform landing — reward +1");
         }
-
-        if (landingY < _bestY - minDelta && _rewardWeights.PlatformLandingDownPenalty != 0f)
+        else if (landingY < _lastLandingY - minDelta && _rewardWeights.PlatformLandingDownPenalty != 0f)
         {
+            _lastLandingY = landingY;
             AddReward(_rewardWeights.PlatformLandingDownPenalty);
             RecordStat("Environment/PlatformLandingDown", 1f, StatAggregationMethod.Sum);
         }
+        else if (landingY > _lastLandingY + minDelta && _rewardWeights.PlatformLandingRecoveryReward != 0f)
+        {
+            _lastLandingY = landingY;
+            AddReward(_rewardWeights.PlatformLandingRecoveryReward);
+        }
+        else
+        {
+            _lastLandingY = landingY;
+        }
+
+        TryRewardGoalDistanceProgress(minDelta, landingPlatformId);
+
+        if (landingPlatformId != 0)
+            _lastLandingPlatformInstanceId = landingPlatformId;
+    }
+
+    private float GetDistanceToGoal()
+    {
+        if (_goalPoint == null)
+            return float.MaxValue;
+
+        return Vector2.Distance((Vector2)transform.position, (Vector2)_goalPoint.position);
+    }
+
+    private void TryRewardGoalDistanceProgress(float minDelta, int landingPlatformId)
+    {
+        if (_rewardWeights.GoalDistanceProgressReward == 0f || _goalPoint == null)
+            return;
+
+        if (landingPlatformId != 0 && landingPlatformId == _lastLandingPlatformInstanceId)
+            return;
+
+        float dist = GetDistanceToGoal();
+        if (dist >= _bestDistToGoal - minDelta)
+            return;
+
+        _bestDistToGoal = dist;
+        AddReward(_rewardWeights.GoalDistanceProgressReward);
     }
 
     private void ReportEpisodeStats()

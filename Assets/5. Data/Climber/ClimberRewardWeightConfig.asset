@@ -12,12 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3df4fd19dde6e4789bafb8d9105aea, type: 3}
   m_Name: ClimberRewardWeightConfig
   m_EditorClassIdentifier: Assembly-CSharp::ClimberRewardWeightConfig
-  _platformLandingReward: 1
+  _platformLandingReward: 2
   _platformLandingDownPenalty: -0.5
   _goalReachedReward: 10
-  _lavaContactPenalty: -2
-  _goalApproachRewardPerDecision: 0.02
-  _goalRecedePenaltyPerDecision: -0.005
-  _platformIdlePenaltyPerDecision: -0.001
+  _lavaContactPenalty: -5
+  _platformStallPenaltyPerDecision: -0.01
+  _platformStallTimeSeconds: 3
   _minLandingHeightDelta: 0.5
-  _goalDistanceYThreshold: 0.001

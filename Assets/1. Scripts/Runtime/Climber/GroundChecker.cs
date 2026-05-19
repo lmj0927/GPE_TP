@@ -6,6 +6,7 @@ public sealed class GroundChecker : MonoBehaviour
     [SerializeField] private ClimberMovementConfig _config;
 
     public bool IsGrounded { get; private set; }
+    public Collider2D CurrentPlatform { get; private set; }
 
     public void Configure(Transform origin, ClimberMovementConfig config)
     {
@@ -18,6 +19,7 @@ public sealed class GroundChecker : MonoBehaviour
         if (_origin == null || _config == null)
         {
             IsGrounded = false;
+            CurrentPlatform = null;
             return;
         }
 
@@ -27,7 +29,16 @@ public sealed class GroundChecker : MonoBehaviour
             _config.GroundRayDistance,
             _config.GroundLayers);
 
-        IsGrounded = hit.collider != null && !hit.collider.isTrigger;
+        if (hit.collider != null && !hit.collider.isTrigger)
+        {
+            IsGrounded = true;
+            CurrentPlatform = hit.collider;
+        }
+        else
+        {
+            IsGrounded = false;
+            CurrentPlatform = null;
+        }
     }
 
 #if UNITY_EDITOR

@@ -4,22 +4,22 @@ using UnityEngine;
 public sealed class ClimberRewardWeightConfig : ScriptableObject
 {
     [SerializeField] private float _platformLandingReward = 1f;
+    [SerializeField] private float _platformLandingRecoveryReward = 0.3f;
     [SerializeField] private float _platformLandingDownPenalty = -0.5f;
     [SerializeField] private float _goalReachedReward = 10f;
+    [SerializeField] private float _goalDistanceProgressReward = 0.2f;
     [SerializeField] private float _lavaContactPenalty = -10f;
-    [SerializeField] private float _goalApproachRewardPerDecision = 0.02f;
-    [SerializeField] private float _goalRecedePenaltyPerDecision = -0.005f;
-    [SerializeField] private float _platformIdlePenaltyPerDecision = -0.001f;
+    [SerializeField] private float _platformStallPenaltyPerDecision = -0.001f;
+    [SerializeField] private float _platformStallTimeSeconds = 3f;
     [SerializeField] private float _minLandingHeightDelta = 0.05f;
-    [SerializeField] private float _goalDistanceYThreshold = 0.001f;
 
     public float PlatformLandingReward => _platformLandingReward;
+    public float PlatformLandingRecoveryReward => _platformLandingRecoveryReward;
     public float PlatformLandingDownPenalty => _platformLandingDownPenalty;
     public float GoalReachedReward => _goalReachedReward;
+    public float GoalDistanceProgressReward => _goalDistanceProgressReward;
     public float LavaContactPenalty => _lavaContactPenalty;
-    public float GoalApproachRewardPerDecision => _goalApproachRewardPerDecision;
-    public float GoalRecedePenaltyPerDecision => _goalRecedePenaltyPerDecision;
-    public float PlatformIdlePenaltyPerDecision => _platformIdlePenaltyPerDecision;
+    public float PlatformStallPenaltyPerDecision => _platformStallPenaltyPerDecision;
+    public float PlatformStallTimeSeconds => _platformStallTimeSeconds;
     public float MinLandingHeightDelta => _minLandingHeightDelta;
-    public float GoalDistanceYThreshold => _goalDistanceYThreshold;
 }
