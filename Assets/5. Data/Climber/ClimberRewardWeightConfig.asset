@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: ClimberRewardWeightConfig
   m_EditorClassIdentifier: Assembly-CSharp::ClimberRewardWeightConfig
   _platformLandingReward: 2
-  _platformLandingDownPenalty: -0.5
+  _platformLandingRecoveryReward: 0.1
+  _platformLandingDownPenalty: -1
   _goalReachedReward: 10
+  _goalDistanceProgressReward: 0.2
   _lavaContactPenalty: -5
   _platformStallPenaltyPerDecision: -0.01
   _platformStallTimeSeconds: 3

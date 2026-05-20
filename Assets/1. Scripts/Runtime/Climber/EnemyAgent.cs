@@ -16,6 +16,9 @@ public class EnemyAgent : Agent
     private const int ActionIdle = 1;
     private const int ActionRight = 2;
 
+    /// <summary>Vector observation count (excludes child ray sensors). Match Behavior Parameters.</summary>
+    public const int VectorObservationCount = 7;
+
     [SerializeField] private ClimberMovementConfig _config;
     [SerializeField] private ClimberRewardWeightConfig _rewardWeights;
     [SerializeField] private Transform _groundCheckOrigin;
@@ -34,7 +37,7 @@ public class EnemyAgent : Agent
     private bool _isInvincible;
     private int _jumpBufferFrames;
 
-    private Vector2 _observationOrigin;
+    private float _stageSpan = 1f;
     private float _bestY;
     private float _lastLandingY;
     private float _bestDistToGoal;
@@ -92,6 +95,7 @@ public class EnemyAgent : Agent
         _groundChecker.Refresh();
         var startState = _groundChecker.IsGrounded ? ClimberStateId.Grounded : ClimberStateId.Airborne;
         _stateMachine.Initialize(startState);
+        RefreshStageSpan();
     }
 
     public override void OnEpisodeBegin()
@@ -112,8 +116,8 @@ public class EnemyAgent : Agent
         }
 
         _risingLava?.ResetToStart();
+        RefreshStageSpan();
 
-        _observationOrigin = _startPoint != null ? (Vector2)_startPoint.position : (Vector2)transform.position;
         _bestY = transform.position.y;
         _lastLandingY = _bestY;
         _bestDistToGoal = GetDistanceToGoal();
@@ -134,22 +138,21 @@ public class EnemyAgent : Agent
 
         var agentPosition = (Vector2)transform.position;
         var goalPosition = _goalPoint != null ? (Vector2)_goalPoint.position : agentPosition;
-        var goalRelative = goalPosition - _observationOrigin;
-        var agentRelative = agentPosition - _observationOrigin;
+        var toGoal = goalPosition - agentPosition;
 
-        sensor.AddObservation(goalRelative.x);
-        sensor.AddObservation(goalRelative.y);
-        sensor.AddObservation(agentRelative.x);
-        sensor.AddObservation(agentRelative.y);
+        float span = _stageSpan;
+
+        sensor.AddObservation(Mathf.Clamp(toGoal.x / span, -1f, 1f));
+        sensor.AddObservation(Mathf.Clamp(toGoal.y / span, -1f, 1f));
 
         var velocity = _rigidbody.linearVelocity;
         sensor.AddObservation(Mathf.Clamp(velocity.x / moveSpeed, -1f, 1f));
         sensor.AddObservation(Mathf.Clamp(velocity.y / jumpSpeed, -1f, 1f));
 
-        sensor.AddObservation(goalPosition.x - agentPosition.x);
+        sensor.AddObservation(Mathf.Clamp01(toGoal.magnitude / span));
 
         float lavaDistance = _risingLava != null ? _risingLava.SurfaceY - agentPosition.y : 0f;
-        sensor.AddObservation(lavaDistance);
+        sensor.AddObservation(Mathf.Clamp(lavaDistance / span, -1f, 1f));
 
         bool canJump = _groundChecker.IsGrounded && _motor.CanJump;
         sensor.AddObservation(canJump ? 1f : 0f);
@@ -276,7 +279,6 @@ public class EnemyAgent : Agent
             AddReward(_rewardWeights.PlatformLandingReward);
             _platformLandingsThisEpisode++;
             RecordStat("Environment/PlatformLanding", 1f, StatAggregationMethod.Sum);
-            Debug.Log("[EnemyAgent] Higher platform landing — reward +1");
         }
         else if (landingY < _lastLandingY - minDelta && _rewardWeights.PlatformLandingDownPenalty != 0f)
         {
@@ -344,6 +346,16 @@ public class EnemyAgent : Agent
             return;
 
         Academy.Instance.StatsRecorder.Add(key, value, aggregation);
+    }
+
+    private void RefreshStageSpan()
+    {
+        if (_startPoint != null && _goalPoint != null)
+        {
+            _stageSpan = Mathf.Abs(_startPoint.position.y - _goalPoint.position.y);
+        }
+        else
+            _stageSpan = 1f;
     }
 
     private Transform ResolveStageRoot()

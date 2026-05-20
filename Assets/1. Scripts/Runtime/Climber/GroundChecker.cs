@@ -23,10 +23,15 @@ public sealed class GroundChecker : MonoBehaviour
             return;
         }
 
-        var hit = Physics2D.Raycast(
-            _origin.position,
+        var origin = (Vector2)_origin.position;
+        float radius = _config.GroundCheckRadius;
+        float distance = _config.GroundRayDistance;
+
+        var hit = Physics2D.CircleCast(
+            origin,
+            radius,
             Vector2.down,
-            _config.GroundRayDistance,
+            distance,
             _config.GroundLayers);
 
         if (hit.collider != null && !hit.collider.isTrigger)
@@ -47,9 +52,14 @@ public sealed class GroundChecker : MonoBehaviour
         if (_origin == null || _config == null)
             return;
 
-        Gizmos.color = IsGrounded ? Color.green : Color.red;
+        float radius = _config.GroundCheckRadius;
+        float distance = _config.GroundRayDistance;
         var start = _origin.position;
-        var end = start + Vector3.down * _config.GroundRayDistance;
+        var end = start + Vector3.down * distance;
+
+        Gizmos.color = IsGrounded ? Color.green : Color.red;
+        Gizmos.DrawWireSphere(start, radius);
+        Gizmos.DrawWireSphere(end, radius);
         Gizmos.DrawLine(start, end);
     }
 #endif
