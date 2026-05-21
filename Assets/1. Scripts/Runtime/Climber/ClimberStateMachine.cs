@@ -35,7 +35,5 @@ public sealed class ClimberStateMachine
         _current.Enter(_context);
     }
 
-    public void Tick(ClimberMoveInput input) => _current.Tick(_context, input);
-
     public void FixedTick(ClimberMoveInput input) => _current.FixedTick(_context, input);
 }

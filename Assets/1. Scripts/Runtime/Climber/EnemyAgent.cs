@@ -196,8 +196,6 @@ public class EnemyAgent : Agent
     {
         if (UsesDirectKeyboardInput && _stateMachine.CurrentId != ClimberStateId.HitStun)
             _moveInput = ReadKeyboardInput();
-
-        _stateMachine.Tick(_moveInput);
     }
 
     private void FixedUpdate() => _stateMachine.FixedTick(_moveInput);

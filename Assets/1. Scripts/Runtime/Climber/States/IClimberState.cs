@@ -6,7 +6,5 @@ public interface IClimberState
 
     void Exit(ClimberStateContext context);
 
-    void Tick(ClimberStateContext context, ClimberMoveInput input);
-
     void FixedTick(ClimberStateContext context, ClimberMoveInput input);
 }

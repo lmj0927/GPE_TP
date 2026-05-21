@@ -2,8 +2,8 @@ behaviors:
   ClimberAgent:
     trainer_type: ppo
     hyperparameters:
-      batch_size: 256
-      buffer_size: 20480
+      batch_size: 128
+      buffer_size: 10240
       learning_rate: 3.0e-4
       beta: 3.0e-3
       epsilon: 0.2
@@ -12,7 +12,7 @@ behaviors:
       learning_rate_schedule: linear
     network_settings:
       normalize: false
-      hidden_units: 128
+      hidden_units: 256
       num_layers: 2
     reward_signals:
       extrinsic:

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public sealed class GroundedClimberState : IClimberState
 {
     public ClimberStateId Id => ClimberStateId.Grounded;
@@ -11,13 +13,15 @@ public sealed class GroundedClimberState : IClimberState
     {
     }
 
-    public void Tick(ClimberStateContext context, ClimberMoveInput input)
+    public void FixedTick(ClimberStateContext context, ClimberMoveInput input)
     {
         context.GroundChecker.Refresh();
+        float deltaTime = Time.fixedDeltaTime;
 
         if (!context.GroundChecker.IsGrounded)
         {
             context.Agent.ChangeState(ClimberStateId.Airborne);
+            context.Motor.ApplyHorizontal(input.Horizontal, grounded: false, deltaTime);
             return;
         }
 
@@ -25,11 +29,10 @@ public sealed class GroundedClimberState : IClimberState
         {
             context.Agent.ClearJumpBuffer();
             context.Agent.ChangeState(ClimberStateId.Airborne);
+            context.Motor.ApplyHorizontal(input.Horizontal, grounded: false, deltaTime);
+            return;
         }
-    }
 
-    public void FixedTick(ClimberStateContext context, ClimberMoveInput input)
-    {
-        context.Motor.ApplyHorizontal(input.Horizontal, grounded: true, deltaTime: UnityEngine.Time.fixedDeltaTime);
+        context.Motor.ApplyHorizontal(input.Horizontal, grounded: true, deltaTime);
     }
 }

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public sealed class AirborneClimberState : IClimberState
 {
     public ClimberStateId Id => ClimberStateId.Airborne;
@@ -10,16 +12,13 @@ public sealed class AirborneClimberState : IClimberState
     {
     }
 
-    public void Tick(ClimberStateContext context, ClimberMoveInput input)
+    public void FixedTick(ClimberStateContext context, ClimberMoveInput input)
     {
         context.GroundChecker.Refresh();
 
         if (context.GroundChecker.IsGrounded)
             context.Agent.ChangeState(ClimberStateId.Grounded);
-    }
 
-    public void FixedTick(ClimberStateContext context, ClimberMoveInput input)
-    {
-        context.Motor.ApplyHorizontal(input.Horizontal, grounded: false, deltaTime: UnityEngine.Time.fixedDeltaTime);
+        context.Motor.ApplyHorizontal(input.Horizontal, grounded: false, Time.fixedDeltaTime);
     }
 }

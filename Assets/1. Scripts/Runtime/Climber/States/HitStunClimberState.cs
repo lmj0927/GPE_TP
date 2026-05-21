@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public sealed class HitStunClimberState : IClimberState
 {
     private float _remaining;
@@ -14,10 +16,10 @@ public sealed class HitStunClimberState : IClimberState
         context.Agent.EndInvincibility();
     }
 
-    public void Tick(ClimberStateContext context, ClimberMoveInput input)
+    public void FixedTick(ClimberStateContext context, ClimberMoveInput input)
     {
         context.GroundChecker.Refresh();
-        _remaining -= UnityEngine.Time.deltaTime;
+        _remaining -= Time.fixedDeltaTime;
 
         if (_remaining > 0f)
             return;
@@ -26,9 +28,5 @@ public sealed class HitStunClimberState : IClimberState
             context.GroundChecker.IsGrounded
                 ? ClimberStateId.Grounded
                 : ClimberStateId.Airborne);
-    }
-
-    public void FixedTick(ClimberStateContext context, ClimberMoveInput input)
-    {
     }
 }

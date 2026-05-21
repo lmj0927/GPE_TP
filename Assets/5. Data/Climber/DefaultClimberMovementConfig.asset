@@ -19,7 +19,7 @@ MonoBehaviour:
   _gravityScale: 3
   _hitStunDuration: 1
   _groundRayDistance: 0.2
-  _groundCheckRadius: 0.4
+  _groundCheckRadius: 0.5
   _jumpBufferFrames: 8
   _groundLayers:
     serializedVersion: 2
