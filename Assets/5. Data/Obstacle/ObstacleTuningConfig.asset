@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a668542383faaa5429c4d7f074111b66, type: 3}
+  m_Name: ObstacleTuningConfig
+  m_EditorClassIdentifier: Assembly-CSharp::ObstacleTuningConfig
+  _enemyLayers:
+    serializedVersion: 2
+    m_Bits: 4096
+  _recycleBelowWorldY: -30
+  _faller:
+    _fallSpeed: 10
+    _spawnCooldownSeconds: 0.5
+  _bouncer:
+    _launchSpeed: 12
+    _launchAngleDegrees: 315
+    _wallLayers:
+      serializedVersion: 2
+      m_Bits: 256
+    _castRadius: 0.5
+    _surfaceSkin: 0.02
+    _wallBounceDamping: 1
+    _spawnCooldownSeconds: 2
+  _roller:
+    _rollSpeed: 7
+    _gravityScale: 1
+    _platformLayers:
+      serializedVersion: 2
+      m_Bits: 1024
+    _groundRayDistance: 0.1
+    _groundCheckRadius: 0.5
+    _aimXDeadZone: 0.15
+    _wallLayers:
+      serializedVersion: 2
+      m_Bits: 256
+    _surfaceSkin: 0.02
+    _spawnCooldownSeconds: 2

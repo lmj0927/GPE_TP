@@ -1,32 +1,40 @@
+using System.Collections;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
+/// <summary>
+/// Training climber. Shares FSM states via <see cref="IClimberAgent"/>; independent from validation-only agent type.
+/// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(ClimberMotor))]
 [RequireComponent(typeof(GroundChecker))]
 [RequireComponent(typeof(BehaviorParameters))]
-public class EnemyAgent : Agent, IClimberAgent
+public class EnemyAgentVer2 : Agent, IClimberAgent
 {
     private const int HorizontalBranch = 0;
     private const int JumpBranch = 1;
     private const int ActionLeft = 0;
     private const int ActionIdle = 1;
     private const int ActionRight = 2;
+    private const int ObstacleHitDamage = 1;
+    private const int LavaDamage = 999;
 
     /// <summary>Vector observation count (excludes child ray sensors). Match Behavior Parameters.</summary>
     public const int VectorObservationCount = 7;
 
     [SerializeField] private ClimberMovementConfig _config;
-    [SerializeField] private ClimberRewardWeightConfig _rewardWeights;
+    [SerializeField] private ClimberVer2RewardWeightConfig _rewardWeights;
     [SerializeField] private Transform _groundCheckOrigin;
     [SerializeField] private Transform _startPoint;
     [SerializeField] private Transform _goalPoint;
     [SerializeField] private RisingLava _risingLava;
+    [SerializeField] private HeuristicSpawnerBot _heuristicSpawner;
 
     [SerializeField] private float _horizontalDeadZone = 0.15f;
+    [SerializeField] private int _maxHealth = 3;
 
     private Rigidbody2D _rigidbody;
     private ClimberMotor _motor;
@@ -35,6 +43,7 @@ public class EnemyAgent : Agent, IClimberAgent
     private ClimberStateMachine _stateMachine;
     private ClimberMoveInput _moveInput;
     private bool _isInvincible;
+    private int _health;
     private int _jumpBufferFrames;
 
     private float _stageSpan = 1f;
@@ -50,10 +59,12 @@ public class EnemyAgent : Agent, IClimberAgent
 
     public ClimberStateId CurrentState => _stateMachine.CurrentId;
 
-    Vector2 IClimberAgent.WorldPosition => transform.position;
+    public int Health => _health;
+    public int MaxHealth => _maxHealth;
 
-    Vector2 IClimberAgent.WorldVelocity =>
-        _rigidbody != null ? _rigidbody.linearVelocity : Vector2.zero;
+    public Vector2 WorldPosition => transform.position;
+
+    public Vector2 WorldVelocity => _rigidbody != null ? _rigidbody.linearVelocity : Vector2.zero;
 
     private bool UsesDirectKeyboardInput =>
         _behaviorParameters != null &&
@@ -111,6 +122,7 @@ public class EnemyAgent : Agent, IClimberAgent
         _moveInput = ClimberMoveInput.Zero;
         _isInvincible = false;
         _jumpBufferFrames = 0;
+        _health = _maxHealth;
 
         if (_startPoint != null)
         {
@@ -132,6 +144,8 @@ public class EnemyAgent : Agent, IClimberAgent
         _groundChecker.Refresh();
         var startState = _groundChecker.IsGrounded ? ClimberStateId.Grounded : ClimberStateId.Airborne;
         _stateMachine.Initialize(startState);
+
+        _heuristicSpawner?.ResetForEpisode();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -354,9 +368,7 @@ public class EnemyAgent : Agent, IClimberAgent
     private void RefreshStageSpan()
     {
         if (_startPoint != null && _goalPoint != null)
-        {
             _stageSpan = Mathf.Abs(_startPoint.position.y - _goalPoint.position.y);
-        }
         else
             _stageSpan = 1f;
     }
@@ -376,9 +388,7 @@ public class EnemyAgent : Agent, IClimberAgent
 
     public void NotifyLavaContact()
     {
-        if (_rewardWeights != null)
-            AddReward(_rewardWeights.LavaContactPenalty);
-        EndEpisode();
+        ApplyDamage(LavaDamage);
     }
 
     private ClimberMoveInput ReadKeyboardInput()
@@ -430,6 +440,65 @@ public class EnemyAgent : Agent, IClimberAgent
 
     public void ApplyHit()
     {
+        if (_stateMachine.CurrentId == ClimberStateId.HitStun)
+            return;
+
+        ApplyDamage(ObstacleHitDamage);
+    }
+
+    public void EndInvincibility()
+    {
+        StartCoroutine(EndInvincibilityCoroutine());
+    }
+
+    IEnumerator EndInvincibilityCoroutine()
+    {
+        yield return new WaitForSeconds(_config.HitStunDuration);
+        _isInvincible = false;
+    }
+
+    public void Die()
+    {
+        //enabled = false;
+        _rigidbody.simulated = false;
+    }
+
+    private void ApplyDamage(int amount)
+    {
+        if (amount <= 0 || _health <= 0 || _isInvincible)
+            return;
+
+        _health -= amount;
+
+        if (amount == ObstacleHitDamage)
+            ApplyHitPenalty();
+
+        if (_health > 0)
+        {
+            EnterHitStun();
+            return;
+        }
+
+        _health = 0;
+        ApplyDeadPenalty();
+        Die();
+        EndEpisode();
+    }
+
+    private void ApplyHitPenalty()
+    {
+        if (_rewardWeights != null)
+            AddReward(_rewardWeights.HitPenalty);
+    }
+
+    private void ApplyDeadPenalty()
+    {
+        if (_rewardWeights != null)
+            AddReward(_rewardWeights.DeadPenalty);
+    }
+
+    private void EnterHitStun()
+    {
         if (_isInvincible)
             return;
 
@@ -437,14 +506,6 @@ public class EnemyAgent : Agent, IClimberAgent
         _jumpBufferFrames = 0;
         _isInvincible = true;
         ChangeState(ClimberStateId.HitStun);
-    }
-
-    public void EndInvincibility() => _isInvincible = false;
-
-    public void Die()
-    {
-        enabled = false;
-        _rigidbody.simulated = false;
     }
 
 #if UNITY_EDITOR

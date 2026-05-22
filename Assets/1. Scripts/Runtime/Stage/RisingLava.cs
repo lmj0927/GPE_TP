@@ -27,7 +27,7 @@ public sealed class RisingLava : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        var agent = other.GetComponent<EnemyAgent>() ?? other.GetComponentInParent<EnemyAgent>();
-        agent?.NotifyLavaContact();
+        if (other.TryGetComponent(out IClimberAgent climber))
+            climber.NotifyLavaContact();
     }
 }
