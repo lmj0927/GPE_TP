@@ -16,6 +16,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
 {
     private const int HorizontalBranch = 0;
     private const int JumpBranch = 1;
+    private const int JumpAction = 1;
     private const int ActionLeft = 0;
     private const int ActionIdle = 1;
     private const int ActionRight = 2;
@@ -175,6 +176,15 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
 
         bool canJump = _groundChecker.IsGrounded && _motor.CanJump;
         sensor.AddObservation(canJump ? 1f : 0f);
+    }
+
+    public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
+    {
+        _groundChecker.Refresh();
+        bool canJump = _stateMachine.CurrentId != ClimberStateId.HitStun
+            && _groundChecker.IsGrounded
+            && _motor.CanJump;
+        actionMask.SetActionEnabled(JumpBranch, JumpAction, canJump);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)

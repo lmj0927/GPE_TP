@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 /// <summary>
-/// Training spawner: each frame spawns every obstacle type that is off cooldown (no spawn interval).
+/// Training spawner: one spawn attempt per <see cref="SpawnerPatternConfig.SpawnIntervalSeconds"/>.
+/// Ready types compete by longest per-type cooldown duration (Roller &gt; Bouncer &gt; Faller).
 /// </summary>
 public sealed class HeuristicSpawnerBot : MonoBehaviour
 {
@@ -16,11 +18,50 @@ public sealed class HeuristicSpawnerBot : MonoBehaviour
     private static readonly ObstacleKind[] AllKinds =
         (ObstacleKind[])Enum.GetValues(typeof(ObstacleKind));
 
-    public void ResetForEpisode() => _spawner?.ResetForEpisode();
+    private Coroutine _spawnLoop;
 
-    private void Update()
+    private void OnEnable() => RestartSpawnLoop();
+
+    private void OnDisable() => StopSpawnLoop();
+
+    public void ResetForEpisode()
+    {
+        _spawner?.ResetForEpisode();
+        if (isActiveAndEnabled)
+            RestartSpawnLoop();
+    }
+
+    private void RestartSpawnLoop()
+    {
+        StopSpawnLoop();
+        _spawnLoop = StartCoroutine(SpawnLoop());
+    }
+
+    private void StopSpawnLoop()
+    {
+        if (_spawnLoop == null)
+            return;
+
+        StopCoroutine(_spawnLoop);
+        _spawnLoop = null;
+    }
+
+    private IEnumerator SpawnLoop()
+    {
+        while (true)
+        {
+            float interval = _pattern != null ? _pattern.SpawnIntervalSeconds : 1f;
+            yield return new WaitForSeconds(interval);
+            TrySpawnAttempt();
+        }
+    }
+
+    private void TrySpawnAttempt()
     {
         if (_climber == null || _spawner == null || _pattern == null)
+            return;
+
+        if (!TryPickReadyKindWithLongestCooldown(out ObstacleKind kind))
             return;
 
         Vector2 climberPos = _climber.WorldPosition;
@@ -28,18 +69,36 @@ public sealed class HeuristicSpawnerBot : MonoBehaviour
         float aimX = climberPos.x + climberVel.x * _pattern.AimLeadSeconds;
         var spawnPosition = new Vector2(aimX, climberPos.y + _pattern.SpawnHeightOffset);
 
+        Vector2? launchDirection = kind == ObstacleKind.Bouncer
+            ? SampleRandomDownwardBouncerDirection()
+            : null;
+
+        _spawner.TrySpawn(kind, spawnPosition, aimX, _climber, launchDirection);
+    }
+
+    /// <summary>Among off-cooldown kinds, picks the one with the longest configured spawn cooldown.</summary>
+    private bool TryPickReadyKindWithLongestCooldown(out ObstacleKind kind)
+    {
+        kind = default;
+        float bestCooldown = -1f;
+        bool found = false;
+
         for (int i = 0; i < AllKinds.Length; i++)
         {
-            ObstacleKind kind = AllKinds[i];
-            if (!_spawner.IsReady(kind))
+            ObstacleKind candidate = AllKinds[i];
+            if (!_spawner.IsReady(candidate))
                 continue;
 
-            Vector2? launchDirection = kind == ObstacleKind.Bouncer
-                ? SampleRandomDownwardBouncerDirection()
-                : null;
+            float cooldown = _spawner.CooldownDuration(candidate);
+            if (cooldown <= bestCooldown)
+                continue;
 
-            _spawner.TrySpawn(kind, spawnPosition, aimX, _climber, launchDirection);
+            bestCooldown = cooldown;
+            kind = candidate;
+            found = true;
         }
+
+        return found;
     }
 
     private Vector2 SampleRandomDownwardBouncerDirection()

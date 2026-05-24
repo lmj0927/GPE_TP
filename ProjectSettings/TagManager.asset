@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Platform
   - Wall
+  - Obstacle
   layers:
   - Default
   - TransparentFX

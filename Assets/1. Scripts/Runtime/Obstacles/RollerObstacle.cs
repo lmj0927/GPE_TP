@@ -23,6 +23,12 @@ public sealed class RollerObstacle : ObstacleBase
 
     protected override void OnFixedTick(float deltaTime)
     {
+        if(transform.position.y < -11f)
+        {
+            ReleaseToPool();
+            return;
+        }
+
         if (Tuning == null)
             return;
 
