@@ -15,5 +15,5 @@ MonoBehaviour:
   _spawnIntervalSeconds: 0.8
   _aimLeadSeconds: 0.4
   _spawnHeightOffset: 30
-  _bouncerMinDownTiltDegrees: 10
-  _bouncerMaxDownTiltDegrees: 45
+  _bouncerMinDownTiltDegrees: 60
+  _bouncerMaxDownTiltDegrees: 80

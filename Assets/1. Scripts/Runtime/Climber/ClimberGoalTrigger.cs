@@ -5,7 +5,7 @@ public sealed class ClimberGoalTrigger : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponentInParent<MonoBehaviour>() is IClimberAgent climber)
+        if (other.TryGetComponent<IClimberAgent>(out var climber))
             climber.NotifyGoalReached();
     }
 }
