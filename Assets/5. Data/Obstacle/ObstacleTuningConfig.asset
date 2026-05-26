@@ -17,10 +17,10 @@ MonoBehaviour:
     m_Bits: 4096
   _recycleBelowWorldY: -30
   _faller:
-    _fallSpeed: 10
+    _fallSpeed: 8
     _spawnCooldownSeconds: 0.8
   _bouncer:
-    _launchSpeed: 12
+    _launchSpeed: 8
     _launchAngleDegrees: 315
     _wallLayers:
       serializedVersion: 2

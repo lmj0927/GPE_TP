@@ -24,7 +24,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     private const int LavaDamage = 999;
 
     /// <summary>Vector observation count (excludes child ray sensors). Match Behavior Parameters.</summary>
-    public const int VectorObservationCount = 7;
+    public const int VectorObservationCount = 8;
 
     [SerializeField] private ClimberMovementConfig _config;
     [SerializeField] private ClimberVer2RewardWeightConfig _rewardWeights;
@@ -35,7 +35,6 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     [SerializeField] private HeuristicSpawnerBot _heuristicSpawner;
 
     [SerializeField] private float _horizontalDeadZone = 0.15f;
-    [SerializeField] private int _maxHealth = 3;
 
     private Rigidbody2D _rigidbody;
     private ClimberMotor _motor;
@@ -61,7 +60,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     public ClimberStateId CurrentState => _stateMachine.CurrentId;
 
     public int Health => _health;
-    public int MaxHealth => _maxHealth;
+    public int MaxHealth => _config != null ? _config.MaxHealth : 1;
 
     public Vector2 WorldPosition => transform.position;
 
@@ -123,7 +122,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         _moveInput = ClimberMoveInput.Zero;
         _isInvincible = false;
         _jumpBufferFrames = 0;
-        _health = _maxHealth;
+        _health = MaxHealth;
 
         if (_startPoint != null)
         {
@@ -176,14 +175,23 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
 
         bool canJump = _groundChecker.IsGrounded && _motor.CanJump;
         sensor.AddObservation(canJump ? 1f : 0f);
+
+        int maxHealth = MaxHealth;
+        sensor.AddObservation(maxHealth > 0 ? (float)_health / maxHealth : 0f);
     }
 
     public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
     {
         _groundChecker.Refresh();
-        bool canJump = _stateMachine.CurrentId != ClimberStateId.HitStun
-            && _groundChecker.IsGrounded
-            && _motor.CanJump;
+
+        bool inHitStun = _stateMachine.CurrentId == ClimberStateId.HitStun;
+        if (inHitStun)
+        {
+            actionMask.SetActionEnabled(HorizontalBranch, ActionLeft, false);
+            actionMask.SetActionEnabled(HorizontalBranch, ActionRight, false);
+        }
+
+        bool canJump = !inHitStun && _groundChecker.IsGrounded && _motor.CanJump;
         actionMask.SetActionEnabled(JumpBranch, JumpAction, canJump);
     }
 

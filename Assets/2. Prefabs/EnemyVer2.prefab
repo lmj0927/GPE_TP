@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Policies.BehaviorParameters
   m_BrainParameters:
-    VectorObservationSize: 7
+    VectorObservationSize: 8
     NumStackedVectorObservations: 3
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -637,7 +637,6 @@ MonoBehaviour:
   _risingLava: {fileID: 0}
   _heuristicSpawner: {fileID: 0}
   _horizontalDeadZone: 0.15
-  _maxHealth: 3
 --- !u!114 &6689428367099565711
 MonoBehaviour:
   m_ObjectHideFlags: 0
