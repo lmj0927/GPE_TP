@@ -8766,7 +8766,7 @@ GameObject:
   m_Component:
   - component: {fileID: 322430952}
   - component: {fileID: 322430951}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visual_RightWall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -30829,6 +30829,68 @@ Transform:
   - {fileID: 362553623}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1341261792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1341261794}
+  - component: {fileID: 1341261793}
+  - component: {fileID: 1341261795}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1341261793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341261792}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f10265aea86b6ae4ca366b7f43a77068, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObstacleSpawnTest
+  _obstaclePool: {fileID: 2028718406}
+  _spawnHeight: 12
+  _debugPlayerAimX: 0
+--- !u!4 &1341261794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341261792}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1341261795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341261792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c818d495ba086342a34924ea4de08ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerObstacleSpawner
+  _obstaclePool: {fileID: 2028718406}
+  _tuning: {fileID: 11400000, guid: c99349f8c7ddaf64db944ba8ee397d23, type: 2}
 --- !u!1 &1349436537
 GameObject:
   m_ObjectHideFlags: 0
@@ -35177,9 +35239,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1517915766}
   - component: {fileID: 1517915765}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visual_LeftWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49718,6 +49780,61 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &2028718405
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2028718407}
+  - component: {fileID: 2028718406}
+  m_Layer: 0
+  m_Name: ObjectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2028718406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028718405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba33454db5d3384d9c73a0b9ccbf0fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObstaclePool
+  _poolRoot: {fileID: 0}
+  _entries:
+  - _kind: 0
+    _prefab: {fileID: 4954211669609405867, guid: bc485176691f4c7478435b4f619dfcfc, type: 3}
+    _prewarmCount: 1000
+  - _kind: 1
+    _prefab: {fileID: 6243694720866271251, guid: d240037a54fd2864587ad0a65c1c4964, type: 3}
+    _prewarmCount: 1000
+  - _kind: 2
+    _prefab: {fileID: 1700657719475113735, guid: 1e2ea5c5ee7bff8429ea87beb1aca5f6, type: 3}
+    _prewarmCount: 1000
+--- !u!4 &2028718407
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028718405}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -25.8602, y: 23.59904, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2031311019
 GameObject:
   m_ObjectHideFlags: 0
@@ -52920,6 +53037,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2156341655863405623, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 2554283083113987702, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
       propertyPath: _goalPoint
       value: 
@@ -52932,13 +53053,17 @@ PrefabInstance:
       propertyPath: _startPoint
       value: 
       objectReference: {fileID: 1939912948}
+    - target: {fileID: 2754130421523261416, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 3746469661099049955, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: bafe3a8e9b40d3e4294d1e4d907f8724, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 3746469661099049955, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
       propertyPath: m_BehaviorType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3746469661099049955, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
       propertyPath: m_InferenceDevice
@@ -52948,9 +53073,29 @@ PrefabInstance:
       propertyPath: m_DeterministicInference
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4209606287776624458, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516053500059257291, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5312918076216907136, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 7099461040978762842, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099461040978762842, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7475333627215327811, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8935093168384108335, guid: 19fb81f2575c42d4a95bff871d088907, type: 3}
       propertyPath: m_LocalPosition.x
@@ -53014,3 +53159,5 @@ SceneRoots:
   - {fileID: 1552848489}
   - {fileID: 1351344806}
   - {fileID: 941864171}
+  - {fileID: 2028718407}
+  - {fileID: 1341261794}

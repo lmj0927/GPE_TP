@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "ClimberMovementConfig", menuName = "GPE/Climber/Movement Config")]
 public class ClimberMovementConfig : ScriptableObject
@@ -9,8 +10,11 @@ public class ClimberMovementConfig : ScriptableObject
     [SerializeField] private float _jumpVelocity = 15f;
     [SerializeField] private float _gravityScale = 3f;
     [SerializeField] private float _hitStunDuration = 1f;
-    [SerializeField] private float _groundRayDistance = 0.2f;
-    [SerializeField] private float _groundCheckRadius = 0.25f;
+    [SerializeField, Min(1)] private int _maxHealth = 3;
+    [FormerlySerializedAs("_groundRayDistance")]
+    [SerializeField] private float _groundCheckBoxHeight = 0.2f;
+    [FormerlySerializedAs("_groundCheckRadius")]
+    [SerializeField] private float _groundCheckBoxLength = 0.25f;
     [SerializeField] private int _jumpBufferFrames = 8;
     [SerializeField] private LayerMask _groundLayers;
 
@@ -20,8 +24,9 @@ public class ClimberMovementConfig : ScriptableObject
     public float JumpVelocity => _jumpVelocity;
     public float GravityScale => _gravityScale;
     public float HitStunDuration => _hitStunDuration;
-    public float GroundRayDistance => _groundRayDistance;
-    public float GroundCheckRadius => _groundCheckRadius;
+    public int MaxHealth => _maxHealth;
+    public float GroundCheckBoxHeight => _groundCheckBoxHeight;
+    public float GroundCheckBoxLength => _groundCheckBoxLength;
     public int JumpBufferFrames => _jumpBufferFrames;
     public LayerMask GroundLayers => _groundLayers;
 

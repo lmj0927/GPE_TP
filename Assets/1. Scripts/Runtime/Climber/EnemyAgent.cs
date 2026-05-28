@@ -8,7 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(ClimberMotor))]
 [RequireComponent(typeof(GroundChecker))]
 [RequireComponent(typeof(BehaviorParameters))]
-public class EnemyAgent : Agent
+public class EnemyAgent : Agent, IClimberAgent
 {
     private const int HorizontalBranch = 0;
     private const int JumpBranch = 1;
@@ -49,6 +49,11 @@ public class EnemyAgent : Agent
     private float _lastPlatformStallSampleTime;
 
     public ClimberStateId CurrentState => _stateMachine.CurrentId;
+
+    Vector2 IClimberAgent.WorldPosition => transform.position;
+
+    Vector2 IClimberAgent.WorldVelocity =>
+        _rigidbody != null ? _rigidbody.linearVelocity : Vector2.zero;
 
     private bool UsesDirectKeyboardInput =>
         _behaviorParameters != null &&
