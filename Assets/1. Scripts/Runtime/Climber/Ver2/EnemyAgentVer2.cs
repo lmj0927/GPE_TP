@@ -22,6 +22,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     private const int ActionRight = 2;
     private const int ObstacleHitDamage = 1;
     private const int LavaDamage = 999;
+    private const float JumpTriggerMinUpVelocity = 0.1f;
 
     /// <summary>Vector observation count (excludes child ray sensors). Match Behavior Parameters.</summary>
     public const int VectorObservationCount = 8;
@@ -33,6 +34,8 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     [SerializeField] private Transform _goalPoint;
     [SerializeField] private RisingLava _risingLava;
     [SerializeField] private HeuristicSpawnerBot _heuristicSpawner;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
 
     [SerializeField] private float _horizontalDeadZone = 0.15f;
 
@@ -70,12 +73,21 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         _behaviorParameters != null &&
         _behaviorParameters.BehaviorType == BehaviorType.HeuristicOnly;
 
+    private static readonly int IsGroundHash = Animator.StringToHash("IsGround");
+    private static readonly int JumpTriggerHash = Animator.StringToHash("JumpTrigger");
+    private static readonly int StunTriggerHash = Animator.StringToHash("StunTrigger");
+    private static readonly int DieTriggerHash = Animator.StringToHash("DieTrigger");
+
     public override void Initialize()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _motor = GetComponent<ClimberMotor>();
         _groundChecker = GetComponent<GroundChecker>();
         _behaviorParameters = GetComponent<BehaviorParameters>();
+        if (_animator == null)
+            _animator = GetComponentInChildren<Animator>();
+        if (_spriteRenderer == null)
+            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (_groundCheckOrigin == null)
         {
@@ -111,6 +123,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         _groundChecker.Refresh();
         var startState = _groundChecker.IsGrounded ? ClimberStateId.Grounded : ClimberStateId.Airborne;
         _stateMachine.Initialize(startState);
+        SyncAnimatorGround(startState == ClimberStateId.Grounded);
         RefreshStageSpan();
     }
 
@@ -144,6 +157,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         _groundChecker.Refresh();
         var startState = _groundChecker.IsGrounded ? ClimberStateId.Grounded : ClimberStateId.Airborne;
         _stateMachine.Initialize(startState);
+        ResetAnimatorForEpisode(startState == ClimberStateId.Grounded);
 
         _heuristicSpawner?.ResetForEpisode();
     }
@@ -227,12 +241,16 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
 
         if (!UsesDirectKeyboardInput)
             _moveInput = ToMoveInput(actions);
+
+        UpdateFacingFromMoveInput(_moveInput.Horizontal);
     }
 
     private void Update()
     {
         if (UsesDirectKeyboardInput && _stateMachine.CurrentId != ClimberStateId.HitStun)
             _moveInput = ReadKeyboardInput();
+
+        UpdateFacingFromMoveInput(_moveInput.Horizontal);
     }
 
     private void FixedUpdate() => _stateMachine.FixedTick(_moveInput);
@@ -292,6 +310,8 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
 
         if (stateId == ClimberStateId.Grounded && previous == ClimberStateId.Airborne)
             TryRewardNewPlatformLanding();
+
+        UpdateAnimatorOnStateChanged(previous, stateId);
     }
 
     private void TryRewardNewPlatformLanding()
@@ -479,6 +499,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     {
         //enabled = false;
         _rigidbody.simulated = false;
+        TriggerAnimator(DieTriggerHash);
     }
 
     private void ApplyDamage(int amount)
@@ -523,7 +544,68 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         _moveInput = ClimberMoveInput.Zero;
         _jumpBufferFrames = 0;
         _isInvincible = true;
+        TriggerAnimator(StunTriggerHash);
         ChangeState(ClimberStateId.HitStun);
+    }
+
+    private void ResetAnimatorForEpisode(bool isGrounded)
+    {
+        if (_animator == null)
+            return;
+
+        _animator.Rebind();
+        _animator.Update(0f);
+        _animator.ResetTrigger(JumpTriggerHash);
+        _animator.ResetTrigger(StunTriggerHash);
+        _animator.ResetTrigger(DieTriggerHash);
+        SyncAnimatorGround(isGrounded);
+    }
+
+    private void UpdateAnimatorOnStateChanged(ClimberStateId previous, ClimberStateId next)
+    {
+        if (_animator == null)
+            return;
+
+        SyncAnimatorGround(next == ClimberStateId.Grounded);
+
+        if (previous == ClimberStateId.Grounded &&
+            next == ClimberStateId.Airborne &&
+            _rigidbody != null &&
+            _rigidbody.linearVelocity.y > JumpTriggerMinUpVelocity)
+        {
+            TriggerAnimator(JumpTriggerHash);
+        }
+    }
+
+    private void SyncAnimatorGround(bool isGrounded)
+    {
+        if (_animator == null)
+            return;
+
+        _animator.SetBool(IsGroundHash, isGrounded);
+    }
+
+    private void TriggerAnimator(int triggerHash)
+    {
+        if (_animator == null)
+            return;
+
+        _animator.SetTrigger(triggerHash);
+    }
+
+    private void UpdateFacingFromMoveInput(float horizontal)
+    {
+        if (_spriteRenderer == null)
+            return;
+
+        if (horizontal < -_horizontalDeadZone)
+        {
+            _spriteRenderer.flipX = true;
+        }
+        else if (horizontal > _horizontalDeadZone)
+        {
+            _spriteRenderer.flipX = false;
+        }
     }
 
 #if UNITY_EDITOR

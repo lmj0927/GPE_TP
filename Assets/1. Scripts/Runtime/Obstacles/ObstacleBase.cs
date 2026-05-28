@@ -13,7 +13,7 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
     private Rigidbody2D _rigidbody;
     private bool _hitConsumed;
     private float _playerAimWorldX;
-    private IClimberAgent _rollTargetAgent;
+    private IClimberAgent _targetClimber;
     private Vector2? _spawnLaunchDirection;
     private Action<ObstacleBase> _releaseToPool;
 
@@ -22,7 +22,7 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
     protected ObstacleTuningConfig Tuning => _tuning;
     protected Rigidbody2D Rigidbody => _rigidbody;
     protected float PlayerAimWorldX => _playerAimWorldX;
-    protected IClimberAgent RollTargetAgent => _rollTargetAgent;
+    protected IClimberAgent TargetClimber => _targetClimber;
     protected Vector2? SpawnLaunchDirection => _spawnLaunchDirection;
 
     public void BindPool(Action<ObstacleBase> releaseToPool) => _releaseToPool = releaseToPool;
@@ -47,7 +47,7 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
     {
         _releaseToPool = null;
         _hitConsumed = false;
-        _rollTargetAgent = null;
+        _targetClimber = null;
         _spawnLaunchDirection = null;
 
         if (_rigidbody != null)
@@ -57,11 +57,11 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
     public void Activate(
         Vector2 worldPosition,
         float playerAimWorldX,
-        IClimberAgent rollTargetAgent = null,
+        IClimberAgent targetClimber = null,
         Vector2? launchDirection = null)
     {
         _playerAimWorldX = playerAimWorldX;
-        _rollTargetAgent = rollTargetAgent;
+        _targetClimber = targetClimber;
         _spawnLaunchDirection = launchDirection;
         _hitConsumed = false;
         transform.position = worldPosition;
@@ -84,13 +84,24 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
     protected virtual void FixedUpdate()
     {
         OnFixedTick(Time.fixedDeltaTime);
-        TryRecycleBelowWorldY();
+        TryRecycleBelowTargetClimber();
     }
 
     protected abstract void OnFixedTick(float deltaTime);
 
-    protected void TryRecycleBelowWorldY()
+    protected void TryRecycleBelowTargetClimber()
     {
+        if (TargetClimber != null)
+        {
+            if (Tuning == null)
+                return;
+
+            float recycleY = TargetClimber.WorldPosition.y - Tuning.RecycleBelowTargetOffsetY;
+            if (transform.position.y < recycleY)
+                ReleaseToPool();
+            return;
+        }
+
         if (Tuning == null)
             return;
 

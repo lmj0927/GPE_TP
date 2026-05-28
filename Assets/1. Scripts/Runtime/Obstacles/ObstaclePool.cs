@@ -46,7 +46,7 @@ public sealed class ObstaclePool : MonoBehaviour
         ObstacleKind kind,
         Vector2 worldPosition,
         float playerAimWorldX,
-        IClimberAgent rollTargetAgent = null,
+        IClimberAgent targetClimber = null,
         Vector2? launchDirection = null)
     {
         if (!_pools.TryGetValue(kind, out var pool))
@@ -57,7 +57,7 @@ public sealed class ObstaclePool : MonoBehaviour
 
         var obstacle = pool.Rent();
         obstacle.BindPool(Release);
-        obstacle.Activate(worldPosition, playerAimWorldX, rollTargetAgent, launchDirection);
+        obstacle.Activate(worldPosition, playerAimWorldX, targetClimber, launchDirection);
         return obstacle;
     }
 

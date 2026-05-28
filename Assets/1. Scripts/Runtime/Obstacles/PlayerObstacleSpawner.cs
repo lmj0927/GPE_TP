@@ -35,13 +35,13 @@ public sealed class PlayerObstacleSpawner : MonoBehaviour
         ObstacleKind kind,
         Vector2 worldPosition,
         float playerAimWorldX,
-        IClimberAgent rollTargetAgent = null,
+        IClimberAgent targetClimber = null,
         Vector2? launchDirection = null)
     {
         if (_obstaclePool == null || _cooldowns == null || !_cooldowns.IsReady(kind))
             return false;
 
-        var obstacle = _obstaclePool.Rent(kind, worldPosition, playerAimWorldX, rollTargetAgent, launchDirection);
+        var obstacle = _obstaclePool.Rent(kind, worldPosition, playerAimWorldX, targetClimber, launchDirection);
         if (obstacle == null)
             return false;
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// Lands on Map, rolls with a fixed direction until the next air → grounded landing.
-/// Direction is chosen once per landing toward the injected roll target X, else spawn-time aim.
+/// Direction is chosen once per landing toward the target climber X, else spawn-time aim.
 /// Left/right wall contact flips horizontal roll direction only (not player aim).
 /// </summary>
 public sealed class RollerObstacle : ObstacleBase
@@ -23,12 +23,6 @@ public sealed class RollerObstacle : ObstacleBase
 
     protected override void OnFixedTick(float deltaTime)
     {
-        if(transform.position.y < -11f)
-        {
-            ReleaseToPool();
-            return;
-        }
-
         if (Tuning == null)
             return;
 
@@ -99,17 +93,17 @@ public sealed class RollerObstacle : ObstacleBase
         position = (Vector2)hit.point + hit.normal * (castRadius + tuning.SurfaceSkin);
     }
 
-    private float GetRollTargetWorldXAtLanding()
+    private float GetClimberWorldXAtLanding()
     {
-        if (RollTargetAgent != null)
-            return RollTargetAgent.WorldPosition.x;
+        if (TargetClimber != null)
+            return TargetClimber.WorldPosition.x;
 
         return PlayerAimWorldX;
     }
 
     private int ResolveRollDirectionAtLanding()
     {
-        float targetX = GetRollTargetWorldXAtLanding();
+        float targetX = GetClimberWorldXAtLanding();
         float delta = targetX - transform.position.x;
         float deadZone = Tuning.Roller.AimXDeadZone;
 

@@ -6,12 +6,14 @@ public sealed class ObstacleTuningConfig : ScriptableObject
 {
     [SerializeField] private LayerMask _enemyLayers;
     [SerializeField] private float _recycleBelowWorldY = -30f;
+    [SerializeField] private float _recycleBelowTargetOffsetY = 3f;
     [SerializeField] private FallerTuning _faller = new();
     [SerializeField] private BouncerTuning _bouncer = new();
     [SerializeField] private RollerTuning _roller = new();
 
     public LayerMask EnemyLayers => _enemyLayers;
     public float RecycleBelowWorldY => _recycleBelowWorldY;
+    public float RecycleBelowTargetOffsetY => _recycleBelowTargetOffsetY;
     public FallerTuning Faller => _faller;
     public BouncerTuning Bouncer => _bouncer;
     public RollerTuning Roller => _roller;
