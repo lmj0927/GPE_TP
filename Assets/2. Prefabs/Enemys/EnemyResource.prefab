@@ -85,7 +85,7 @@ Transform:
   m_GameObject: {fileID: 1091118603154108722}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: -2, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -202,7 +202,7 @@ Transform:
   m_GameObject: {fileID: 3188421367106854966}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -2, z: 0}
+  m_LocalPosition: {x: 0, y: -2.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -348,8 +348,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 2, y: 4}
+  m_Offset: {x: 0, y: -0.2}
+  m_Size: {x: 1.5, y: 4}
   m_Direction: 0
 --- !u!50 &3849610783238954393
 Rigidbody2D:
@@ -526,7 +526,7 @@ Transform:
   m_GameObject: {fileID: 3656255797036049362}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: -1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -547,14 +547,14 @@ MonoBehaviour:
   m_SensorName: ObstacleSensor
   m_DetectableTags:
   - Obstacle
-  m_RaysPerDirection: 10
+  m_RaysPerDirection: 30
   m_MaxRayDegrees: 90
-  m_SphereCastRadius: 0.35
+  m_SphereCastRadius: 0.1
   m_RayLength: 35
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 2048
-  m_ObservationStacks: 3
+  m_ObservationStacks: 1
   m_AlternatingRayOrder: 1
   m_UseBatchedRaycasts: 0
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}

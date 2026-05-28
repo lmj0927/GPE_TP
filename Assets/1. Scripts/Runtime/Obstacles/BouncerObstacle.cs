@@ -7,16 +7,31 @@ public sealed class BouncerObstacle : ObstacleBase
 {
     private const float SideWallNormalMinAbsX = 0.5f;
     private const float MinMoveDistance = 0.000001f;
+    private const float DefaultVisualSpinDegreesPerSecond = 720f;
+
+    [SerializeField] private Transform _visualTransform;
+    [SerializeField] private float _visualSpinDegreesPerSecond = DefaultVisualSpinDegreesPerSecond;
 
     private Vector2 _direction;
     private float _speed;
 
     public override ObstacleKind Kind => ObstacleKind.Bouncer;
 
+    
+
+    private void Update()
+    {
+        if (_visualTransform == null)
+            return;
+
+        _visualTransform.Rotate(0f, 0f, _visualSpinDegreesPerSecond * Time.deltaTime);
+    }
+
     protected override void OnActivated()
     {
         if (Tuning == null)
             return;
+            
 
         var tuning = Tuning.Bouncer;
         _speed = tuning.LaunchSpeed;

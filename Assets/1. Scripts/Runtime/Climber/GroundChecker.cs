@@ -24,14 +24,17 @@ public sealed class GroundChecker : MonoBehaviour
         }
 
         var origin = (Vector2)_origin.position;
-        float radius = _config.GroundCheckRadius;
-        float distance = _config.GroundRayDistance;
+        float length = _config.GroundCheckBoxLength;
+        float height = _config.GroundCheckBoxHeight;
+        var size = new Vector2(length, height);
+        var boxCenter = origin + Vector2.up * (height * 0.5f);
 
-        var hit = Physics2D.CircleCast(
-            origin,
-            radius,
+        var hit = Physics2D.BoxCast(
+            boxCenter,
+            size,
+            0f,
             Vector2.down,
-            distance,
+            height,
             _config.GroundLayers);
 
         if (hit.collider != null && !hit.collider.isTrigger)
@@ -52,15 +55,17 @@ public sealed class GroundChecker : MonoBehaviour
         if (_origin == null || _config == null)
             return;
 
-        float radius = _config.GroundCheckRadius;
-        float distance = _config.GroundRayDistance;
-        var start = _origin.position;
-        var end = start + Vector3.down * distance;
+        float length = _config.GroundCheckBoxLength;
+        float height = _config.GroundCheckBoxHeight;
+        var size = new Vector3(length, height, 0f);
+        var feet = _origin.position;
+        var startCenter = feet + Vector3.up * (height * 0.5f);
+        var endCenter = startCenter + Vector3.down * height;
 
         Gizmos.color = IsGrounded ? Color.green : Color.red;
-        Gizmos.DrawWireSphere(start, radius);
-        Gizmos.DrawWireSphere(end, radius);
-        Gizmos.DrawLine(start, end);
+        Gizmos.DrawWireCube(startCenter, size);
+        Gizmos.DrawWireCube(endCenter, size);
+        Gizmos.DrawLine(startCenter, endCenter);
     }
 #endif
 }

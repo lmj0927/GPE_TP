@@ -15,7 +15,8 @@ MonoBehaviour:
   _enemyLayers:
     serializedVersion: 2
     m_Bits: 4096
-  _recycleBelowWorldY: -30
+  _recycleBelowWorldY: -20
+  _recycleBelowTargetOffsetY: 5
   _faller:
     _fallSpeed: 8
     _spawnCooldownSeconds: 0.8

@@ -18,9 +18,9 @@ MonoBehaviour:
   _jumpVelocity: 17
   _gravityScale: 3
   _hitStunDuration: 1
-  _maxHealth: 3
-  _groundRayDistance: 0.2
-  _groundCheckRadius: 0.5
+  _maxHealth: 5
+  _groundCheckBoxHeight: 0.1
+  _groundCheckBoxLength: 1.5
   _jumpBufferFrames: 8
   _groundLayers:
     serializedVersion: 2

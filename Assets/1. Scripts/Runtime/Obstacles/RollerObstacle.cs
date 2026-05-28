@@ -10,14 +10,23 @@ public sealed class RollerObstacle : ObstacleBase
     private Vector2 _velocity;
     private bool _wasOnPlatform;
     private int _rollDirection = 1;
+    private SpriteRenderer _spriteRenderer;
 
     public override ObstacleKind Kind => ObstacleKind.Roller;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        ApplySpriteFlipByRollDirection();
+    }
 
     protected override void OnActivated()
     {
         _velocity = Vector2.zero;
         _wasOnPlatform = false;
         _rollDirection = 1;
+        ApplySpriteFlipByRollDirection();
         ApplyVelocity(_velocity);
     }
 
@@ -31,7 +40,10 @@ public sealed class RollerObstacle : ObstacleBase
         if (TryGetPlatformHit(out var hit))
         {
             if (!_wasOnPlatform)
+            {
                 _rollDirection = ResolveRollDirectionAtLanding();
+                ApplySpriteFlipByRollDirection();
+            }
 
             _wasOnPlatform = true;
             _velocity.x = _rollDirection * tuning.RollSpeed;
@@ -89,6 +101,7 @@ public sealed class RollerObstacle : ObstacleBase
         }
 
         _rollDirection = -_rollDirection;
+        ApplySpriteFlipByRollDirection();
         _velocity.x = _rollDirection * tuning.RollSpeed;
         position = (Vector2)hit.point + hit.normal * (castRadius + tuning.SurfaceSkin);
     }
@@ -113,6 +126,14 @@ public sealed class RollerObstacle : ObstacleBase
             return -1;
 
         return _rollDirection != 0 ? _rollDirection : 1;
+    }
+
+    private void ApplySpriteFlipByRollDirection()
+    {
+        if (_spriteRenderer == null)
+            return;
+
+        _spriteRenderer.flipX = _rollDirection < 0;
     }
 
     private bool TryGetPlatformHit(out RaycastHit2D hit)

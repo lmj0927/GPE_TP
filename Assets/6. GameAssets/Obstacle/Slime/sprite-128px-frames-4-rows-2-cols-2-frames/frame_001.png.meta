@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 23f34f224bd0aed4d96db5e9cb6b5f27
+guid: a3d166b24a3a1c342ae0644c2c139e9d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7052261092988475347
-    second: Bouncer_0
+      213: 8115644005664255767
+    second: frame_001_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 80
+  spritePixelsToUnits: 70
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bouncer_0
+      name: frame_001_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 8
-        width: 138
-        height: 140
+        x: 8
+        y: 5
+        width: 129
+        height: 120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d282d1186e5512e90800000000000000
-      internalID: -7052261092988475347
+      spriteID: 71f6521893f80a070800000000000000
+      internalID: 8115644005664255767
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bouncer_0: -7052261092988475347
+      frame_001_0: 8115644005664255767
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
