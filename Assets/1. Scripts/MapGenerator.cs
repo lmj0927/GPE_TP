@@ -9,8 +9,9 @@ public class MapGenerator : MonoBehaviour
     public int testTemplateIndex = 0;
 
     public int mapLength = 10;
-    public float segmentGap = 1.5f;
+    public float segmentGap = 0.5f;
     public float startOffsetY = 1.5f;
+  
 
     private Vector3 currentTopPosition = Vector3.zero;
 
@@ -57,6 +58,7 @@ public class MapGenerator : MonoBehaviour
 
         Vector3 offset = currentTopPosition - bottom.position;
         newTemplate.transform.position += offset;
+        currentTopPosition = top.position + Vector3.up * segmentGap;
 
         currentTopPosition = top.position + Vector3.up * segmentGap;
     }
