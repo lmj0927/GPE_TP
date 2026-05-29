@@ -104,12 +104,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
                 _startPoint = start;
         }
 
-        if (_goalPoint == null)
-        {
-            var goal = stageRoot.Find("Climb_Goal");
-            if (goal != null)
-                _goalPoint = goal;
-        }
+        ResolveGoalPoint();
 
         if (_risingLava == null)
             _risingLava = FindFirstObjectByType<RisingLava>();
@@ -146,6 +141,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         }
 
         _risingLava?.ResetToStart();
+        ResolveGoalPoint();
         RefreshStageSpan();
 
         _bestY = transform.position.y;
@@ -415,6 +411,12 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     {
         var stage = GameObject.Find("StageRoot");
         return stage != null ? stage.transform : transform.root;
+    }
+
+    private void ResolveGoalPoint()
+    {
+        var goalTrigger = FindFirstObjectByType<ClimberGoalTrigger>();
+        _goalPoint = goalTrigger != null ? goalTrigger.transform : null;
     }
 
     public void NotifyGoalReached()

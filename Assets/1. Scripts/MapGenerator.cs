@@ -1,3 +1,4 @@
+using Unity.MLAgents;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -11,21 +12,52 @@ public class MapGenerator : MonoBehaviour
     public int mapLength = 10;
     [SerializeField] private int offsetY = 30;
 
-    private Vector3 currentTopPosition = Vector3.zero;
+    private Transform _spawnRoot;
+    private Vector3 currentTopPosition;
+    private bool _academySubscribed;
 
-    void Start()
+    private void Awake()
     {
-        currentTopPosition += Vector3.up * offsetY;
+        EnsureSpawnRoot();
+    }
+
+    private void OnEnable()
+    {
+        TrySubscribeAcademy();
+    }
+
+    private void Start()
+    {
+        TrySubscribeAcademy();
+        if (!_academySubscribed)
+            RegenerateMap();
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeAcademy();
+    }
+
+    public void RegenerateMap()
+    {
+        ClearSpawned();
+        currentTopPosition = transform.position + Vector3.up * offsetY;
         GenerateMap();
     }
 
-    void GenerateMap()
+    private void GenerateMap()
     {
+        if (templates == null || templates.Length == 0)
+            return;
+
         if (testSingleTemplate)
         {
             SpawnTemplate(templates[testTemplateIndex]);
             return;
         }
+
+        if (endTemplate == null)
+            return;
 
         int lastIndex = -1;
 
@@ -47,10 +79,50 @@ public class MapGenerator : MonoBehaviour
         SpawnTemplate(endTemplate);
     }
 
-    void SpawnTemplate(GameObject template)
+    private void SpawnTemplate(GameObject template)
     {
-        GameObject newTemplate = Instantiate(template, currentTopPosition, Quaternion.identity);
+        if (template == null)
+            return;
 
+        Instantiate(template, currentTopPosition, Quaternion.identity, _spawnRoot);
         currentTopPosition += Vector3.up * offsetY;
+    }
+
+    private void EnsureSpawnRoot()
+    {
+        if (_spawnRoot != null)
+            return;
+
+        var rootObject = new GameObject("GeneratedMap");
+        _spawnRoot = rootObject.transform;
+        _spawnRoot.SetParent(transform);
+        _spawnRoot.localPosition = Vector3.zero;
+    }
+
+    private void ClearSpawned()
+    {
+        if (_spawnRoot == null)
+            return;
+
+        for (int i = _spawnRoot.childCount - 1; i >= 0; i--)
+            DestroyImmediate(_spawnRoot.GetChild(i).gameObject);
+    }
+
+    private void TrySubscribeAcademy()
+    {
+        if (_academySubscribed || !Academy.IsInitialized)
+            return;
+
+        Academy.Instance.OnEnvironmentReset += RegenerateMap;
+        _academySubscribed = true;
+    }
+
+    private void UnsubscribeAcademy()
+    {
+        if (!_academySubscribed || !Academy.IsInitialized)
+            return;
+
+        Academy.Instance.OnEnvironmentReset -= RegenerateMap;
+        _academySubscribed = false;
     }
 }
