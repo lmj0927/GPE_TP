@@ -300,8 +300,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1638425373
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 9481b490d97561d4d9d78386fbe67b4b, type: 3}
@@ -416,7 +416,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: ClimberAgent
   TeamId: 0
   m_UseChildSensors: 1
@@ -476,7 +476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.DecisionRequester
   DecisionPeriod: 3
-  DecisionStep: 1
+  DecisionStep: 0
   TakeActionsBetweenDecisions: 1
 --- !u!95 &7377184850371549619
 Animator:

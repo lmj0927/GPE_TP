@@ -33,6 +33,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     [SerializeField] private Transform _startPoint;
     [SerializeField] private Transform _goalPoint;
     [SerializeField] private RisingLava _risingLava;
+    [SerializeField] private MapGenerator _mapGenerator;
     [SerializeField] private HeuristicSpawnerBot _heuristicSpawner;
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
@@ -109,6 +110,9 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         if (_risingLava == null)
             _risingLava = FindFirstObjectByType<RisingLava>();
 
+        if (_mapGenerator == null)
+            _mapGenerator = FindFirstObjectByType<MapGenerator>();
+
         _motor.Configure(_rigidbody, _config);
         _groundChecker.Configure(_groundCheckOrigin, _config);
 
@@ -132,6 +136,9 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         _jumpBufferFrames = 0;
         _health = MaxHealth;
 
+        _mapGenerator?.RegenerateMap();
+        ResolveGoalPoint();
+
         if (_startPoint != null)
         {
             transform.position = _startPoint.position;
@@ -141,7 +148,6 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         }
 
         _risingLava?.ResetToStart();
-        ResolveGoalPoint();
         RefreshStageSpan();
 
         _bestY = transform.position.y;

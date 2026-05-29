@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 5160652657737243741}
   m_Layer: 10
   m_Name: Climb_Goal
-  m_TagString: Untagged
+  m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 8193530550239100763}
   m_Layer: 10
   m_Name: Goal
-  m_TagString: Untagged
+  m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

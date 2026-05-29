@@ -1,4 +1,3 @@
-using Unity.MLAgents;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -14,28 +13,10 @@ public class MapGenerator : MonoBehaviour
 
     private Transform _spawnRoot;
     private Vector3 currentTopPosition;
-    private bool _academySubscribed;
 
     private void Awake()
     {
         EnsureSpawnRoot();
-    }
-
-    private void OnEnable()
-    {
-        TrySubscribeAcademy();
-    }
-
-    private void Start()
-    {
-        TrySubscribeAcademy();
-        if (!_academySubscribed)
-            RegenerateMap();
-    }
-
-    private void OnDisable()
-    {
-        UnsubscribeAcademy();
     }
 
     public void RegenerateMap()
@@ -105,24 +86,10 @@ public class MapGenerator : MonoBehaviour
             return;
 
         for (int i = _spawnRoot.childCount - 1; i >= 0; i--)
-            DestroyImmediate(_spawnRoot.GetChild(i).gameObject);
-    }
-
-    private void TrySubscribeAcademy()
-    {
-        if (_academySubscribed || !Academy.IsInitialized)
-            return;
-
-        Academy.Instance.OnEnvironmentReset += RegenerateMap;
-        _academySubscribed = true;
-    }
-
-    private void UnsubscribeAcademy()
-    {
-        if (!_academySubscribed || !Academy.IsInitialized)
-            return;
-
-        Academy.Instance.OnEnvironmentReset -= RegenerateMap;
-        _academySubscribed = false;
+        {
+            var chunk = _spawnRoot.GetChild(i).gameObject;
+            chunk.SetActive(false);
+            Destroy(chunk);
+        }
     }
 }
