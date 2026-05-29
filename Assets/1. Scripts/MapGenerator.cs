@@ -9,14 +9,13 @@ public class MapGenerator : MonoBehaviour
     public int testTemplateIndex = 0;
 
     public int mapLength = 10;
-    public float segmentGap = 1.5f;
-    public float startOffsetY = 1.5f;
+    [SerializeField] private int offsetY = 30;
 
     private Vector3 currentTopPosition = Vector3.zero;
 
     void Start()
     {
-        currentTopPosition = new Vector3(0, startOffsetY, 0);
+        currentTopPosition += Vector3.up * offsetY;
         GenerateMap();
     }
 
@@ -50,14 +49,8 @@ public class MapGenerator : MonoBehaviour
 
     void SpawnTemplate(GameObject template)
     {
-        GameObject newTemplate = Instantiate(template);
+        GameObject newTemplate = Instantiate(template, currentTopPosition, Quaternion.identity);
 
-        Transform bottom = newTemplate.transform.Find("Bottom");
-        Transform top = newTemplate.transform.Find("Top");
-
-        Vector3 offset = currentTopPosition - bottom.position;
-        newTemplate.transform.position += offset;
-
-        currentTopPosition = top.position + Vector3.up * segmentGap;
+        currentTopPosition += Vector3.up * offsetY;
     }
 }
