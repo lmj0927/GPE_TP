@@ -23,11 +23,8 @@ public sealed class ClimberMotor : MonoBehaviour
             return;
 
         float targetX = Mathf.Clamp(direction, -1f, 1f) * _config.MoveSpeed;
-        float accel = grounded ? _config.GroundAcceleration : _config.AirAcceleration;
-        if (accel <= 0f)
-            accel = grounded ? 60f : 40f;
         var velocity = _rigidbody.linearVelocity;
-        velocity.x = Mathf.MoveTowards(velocity.x, targetX, accel * deltaTime);
+        velocity.x = targetX;
         _rigidbody.linearVelocity = velocity;
     }
 
@@ -46,5 +43,26 @@ public sealed class ClimberMotor : MonoBehaviour
     public void ResetJumpOnLanding()
     {
         _jumpConsumed = false;
+    }
+
+    public void Halt()
+    {
+        if (_rigidbody == null)
+            return;
+
+        var velocity = _rigidbody.linearVelocity;
+        velocity.x = 0f;
+        _rigidbody.linearVelocity = velocity;
+        _rigidbody.angularVelocity = 0f;
+    }
+
+    public void SetStunned(bool stunned)
+    {
+        if (_rigidbody == null || _config == null)
+            return;
+
+        
+        if (stunned)
+            Halt();
     }
 }

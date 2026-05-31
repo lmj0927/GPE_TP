@@ -9,15 +9,18 @@ public sealed class HitStunClimberState : IClimberState
     public void Enter(ClimberStateContext context)
     {
         _remaining = context.Config.HitStunDuration;
+        context.Motor.SetStunned(true);
     }
 
     public void Exit(ClimberStateContext context)
     {
+        context.Motor.SetStunned(false);
         context.Agent.EndInvincibility();
     }
 
     public void FixedTick(ClimberStateContext context, ClimberMoveInput input)
     {
+        context.Motor.Halt();
         context.GroundChecker.Refresh();
         _remaining -= Time.fixedDeltaTime;
 

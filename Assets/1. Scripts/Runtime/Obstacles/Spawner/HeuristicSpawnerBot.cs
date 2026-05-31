@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 /// <summary>
 /// Training spawner: one spawn attempt per <see cref="SpawnerPatternConfig.SpawnIntervalSeconds"/>.
 /// Ready types compete by longest per-type cooldown duration (Roller &gt; Bouncer &gt; Faller).
+/// Which kinds can spawn is set on <see cref="SpawnerPatternConfig"/> (Faller-only curriculum, etc.).
 /// </summary>
 public sealed class HeuristicSpawnerBot : MonoBehaviour
 {
@@ -86,6 +87,9 @@ public sealed class HeuristicSpawnerBot : MonoBehaviour
         for (int i = 0; i < AllKinds.Length; i++)
         {
             ObstacleKind candidate = AllKinds[i];
+            if (!_pattern.IsKindEnabled(candidate))
+                continue;
+
             if (!_spawner.IsReady(candidate))
                 continue;
 
