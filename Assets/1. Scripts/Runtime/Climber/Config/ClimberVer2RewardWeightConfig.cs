@@ -12,6 +12,7 @@ public sealed class ClimberVer2RewardWeightConfig : ScriptableObject
     [FormerlySerializedAs("_lavaContactPenalty")]
     [SerializeField] private float _deadPenalty = -10f;
     [SerializeField] private float _hitPenalty = -1f;
+    [SerializeField] private float _survivalRewardPerDecision = 0.0005f;
     [SerializeField] private float _platformStallPenaltyPerDecision = -0.001f;
     [SerializeField] private float _platformStallTimeSeconds = 3f;
     [SerializeField] private float _minLandingHeightDelta = 0.05f;
@@ -23,6 +24,7 @@ public sealed class ClimberVer2RewardWeightConfig : ScriptableObject
     public float GoalDistanceProgressReward => _goalDistanceProgressReward;
     public float DeadPenalty => _deadPenalty;
     public float HitPenalty => _hitPenalty;
+    public float SurvivalRewardPerDecision => _survivalRewardPerDecision;
     public float PlatformStallPenaltyPerDecision => _platformStallPenaltyPerDecision;
     public float PlatformStallTimeSeconds => _platformStallTimeSeconds;
     public float MinLandingHeightDelta => _minLandingHeightDelta;

@@ -29,7 +29,7 @@ MonoBehaviour:
     _castRadius: 0.5
     _surfaceSkin: 0.02
     _wallBounceDamping: 1
-    _spawnCooldownSeconds: 1.5
+    _spawnCooldownSeconds: 2
   _roller:
     _rollSpeed: 3
     _gravityScale: 1

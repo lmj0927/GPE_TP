@@ -263,7 +263,16 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
             return;
 
         _groundChecker.Refresh();
+        ApplySurvivalReward();
         ApplyPlatformStallPenalty();
+    }
+
+    private void ApplySurvivalReward()
+    {
+        if (_rewardWeights.SurvivalRewardPerDecision == 0f || _health <= 0)
+            return;
+
+        AddReward(_rewardWeights.SurvivalRewardPerDecision);
     }
 
     private void ResetPlatformStallTracking()

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83fe74f7863352a4593d23dec837acae, type: 3}
   m_Name: SpawnerPatternConfig
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerPatternConfig
-  _spawnIntervalSeconds: 1.5
+  _spawnIntervalSeconds: 0.8
   _aimLeadSeconds: 0.4
   _spawnHeightOffset: 30
-  _bouncerMinDownTiltDegrees: 60
-  _bouncerMaxDownTiltDegrees: 80
-  _fallerEnabled: 0
+  _bouncerMinDownTiltDegrees: 30
+  _bouncerMaxDownTiltDegrees: 70
+  _fallerEnabled: 1
   _bouncerEnabled: 0
   _rollerEnabled: 0
