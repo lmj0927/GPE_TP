@@ -3751,10 +3751,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 468934732}
     m_Modifications:
+    - target: {fileID: 999362990635176319, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 2437369922138902984, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: d7c16db5c4150fe478dc18401f5474b6, type: 2}
+    - target: {fileID: 2437369922138902984, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -5348964243515120429, guid: d7c16db5c4150fe478dc18401f5474b6, type: 2}
     - target: {fileID: 2437369922138902984, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 1
@@ -3845,27 +3853,62 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6631551795210650472, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[0].text
-      value: dasdas
+      value: "\uB9C8\uCE68\uB0B4 \uB9C8\uC9C0\uB9C9 \uC7A5\uC774 \uC5F4\uB838\uB2E4.
+        \uC6A9\uC0AC\uC5EC, \uB9CC\uC2E0\uCC3D\uC774\uAC00 \uB41C \uBAB8\uC73C\uB85C
+        \uC5EC\uAE30\uAE4C\uC9C0 \uC798\uB3C4 \uAE30\uC5B4\uC62C\uB77C\uC654\uAD6C\uB098.
+        \uD558\uC9C0\uB9CC \uC5EC\uAE30\uAE4C\uC9C0\uB2E4. \uB124\uB188\uC774 \uACF5\uC8FC\uC758
+        \uC190\uB05D\uC5D0 \uB2FF\uB294 \uC21C\uAC04, \uC774 \uD0D1\uACFC \uD568\uAED8
+        \uC628 \uC138\uC0C1\uC774 \uD30C\uBA78\uD560 \uAC83\uC774\uB2E4."
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[1].text
+      value: "\uB2E5\uCCD0\uB77C, \uB9C8\uC655! \uB208\uC55E\uC5D0 \uACF5\uC8FC\uB2D8\uC774
+        \uACC4\uC2DC\uB294\uB370 \uB0B4\uAC00 \uD3EC\uAE30\uD560 \uAC83 \uAC19\uB354\uB0D0!
+        \uB0B4 \uBAA8\uB4E0 \uAC78 \uBC14\uCCD0\uC11C\uB77C\uB3C4 \uC800 \uACB0\uACC4\uB97C
+        \uBD80\uC218\uACE0 \uACF5\uC8FC\uB2D8\uC744 \uC548\uC744 \uAC83\uC774\uB2E4!"
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[2].text
-      value: dsfka[oksa[
+      value: "\uC624\uC9C0 \uB9C8\uC138\uC694... \uB2FF\uC73C\uBA74... \uC6B0\uB9AC
+        \uBAA8\uB450 \uB05D\uC774\uC5D0\uC694..."
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[3].text
+      value: "\uD06C\uD558\uD558\uD558! \uBC1C\uC545\uD574 \uBCF4\uC544\uB77C! \uB9C8\uC9C0\uB9C9
+        \uBC29\uC5B4\uC120\uC774\uC5EC, \uC800 \uC790\uC758 \uC228\uD1B5\uC744 \uC644\uC804\uD788
+        \uB04A\uC5B4\uBC84\uB824\uB77C!"
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[4].text
       value: dasdasdsadas
       objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[0].characterType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[1].characterType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[2].characterType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[3].characterType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 9195563706846626609, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(-2000)]
 public class StoryUI : MonoBehaviour
 {
     [SerializeField] private UI_TextDialog storyDialog;
@@ -18,6 +19,13 @@ public class StoryUI : MonoBehaviour
     {
         characterImage.gameObject.SetActive(false);
         bossImage.gameObject.SetActive(false);
+
+        StartCoroutine(DelayedShow());
+    }
+
+    private System.Collections.IEnumerator DelayedShow()
+    {
+        yield return new WaitForEndOfFrame();
 
         Show();
     }
