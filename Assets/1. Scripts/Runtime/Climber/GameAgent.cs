@@ -207,7 +207,6 @@ public sealed class GameAgent : Agent, IClimberAgent
 
         if (MaxStep > 0 && StepCount + 1 >= MaxStep)
         {
-            EndGameLoss();
             return;
         }
 
@@ -248,7 +247,7 @@ public sealed class GameAgent : Agent, IClimberAgent
         if (_gameEnded)
             return;
 
-        EndGameWin();
+        EndGameLoss();
     }
 
     public void NotifyLavaContact() => ApplyDamage(LavaDamage);
@@ -281,7 +280,7 @@ public sealed class GameAgent : Agent, IClimberAgent
 
         _health = 0;
         Die();
-        EndGameLoss();
+        EndGameWin();
     }
 
     private void EndGameWin()
