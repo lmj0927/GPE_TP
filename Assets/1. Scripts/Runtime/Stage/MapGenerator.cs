@@ -13,10 +13,13 @@ public class MapGenerator : MonoBehaviour
 
     private Transform _spawnRoot;
     private Vector3 currentTopPosition;
+    [SerializeField] private bool generateOnAwake = false;
 
     private void Awake()
     {
         EnsureSpawnRoot();
+        if (generateOnAwake)
+            RegenerateMap();
     }
 
     public void RegenerateMap()
