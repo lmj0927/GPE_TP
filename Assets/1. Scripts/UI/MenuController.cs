@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
@@ -7,8 +8,19 @@ public class MenuController : MonoBehaviour
     public GameObject startMenu;         // 시작하기 버튼이 있는 묶음
     public GameObject levelSelectMenu;   // 레벨 1,2,3 버튼이 있는 묶음
 
+    [Header("레벨 버튼 (비어 있으면 Level1/2/3 자식에서 자동 탐색)")]
+    [SerializeField] private Button _level1Button;
+    [SerializeField] private Button _level2Button;
+    [SerializeField] private Button _level3Button;
+
     // ★ [핵심] 인트로를 보고 왔는지 기억하는 전역 변수
     public static bool isIntroDone = false;
+
+    private void OnEnable()
+    {
+        ResolveLevelButtons();
+        ApplyLevelButtonStates();
+    }
 
     void Start()
     {
@@ -23,6 +35,45 @@ public class MenuController : MonoBehaviour
             startMenu.SetActive(false);     // START 버튼 숨기기
             levelSelectMenu.SetActive(true);  // 레벨 선택창 바로 보이기
         }
+
+        ApplyLevelButtonStates();
+    }
+
+    public static void ReturnFromGame()
+    {
+        isIntroDone = true;
+    }
+
+    private void ResolveLevelButtons()
+    {
+        if (levelSelectMenu == null)
+            return;
+
+        Transform root = levelSelectMenu.transform;
+
+        if (_level1Button == null)
+            _level1Button = root.Find("Level1")?.GetComponent<Button>();
+
+        if (_level2Button == null)
+            _level2Button = root.Find("Level2")?.GetComponent<Button>();
+
+        if (_level3Button == null)
+            _level3Button = root.Find("Level3")?.GetComponent<Button>();
+    }
+
+    private void ApplyLevelButtonStates()
+    {
+        UserData userData = UserDataStore.Load();
+
+        SetButtonInteractable(_level1Button, true);
+        SetButtonInteractable(_level2Button, userData.Level1.IsCleared);
+        SetButtonInteractable(_level3Button, userData.Level2.IsCleared);
+    }
+
+    private static void SetButtonInteractable(Button button, bool interactable)
+    {
+        if (button != null)
+            button.interactable = interactable;
     }
 
     // START 버튼에 연결할 함수 (기존 로직 유지)

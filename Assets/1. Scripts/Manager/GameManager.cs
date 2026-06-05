@@ -10,8 +10,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private PlayerObstacleSpawner _obstacleSpawner;
     [SerializeField] private GameAgent _gameAgent;
     [SerializeField] private GameEndUI _gameEndUI;
+    [SerializeField] private StoryUI _storyUI;
+    [SerializeField] private int _level = 1;
 
     private float _runStartTime;
+    private bool _runEnded;
 
     public float PlayTimeSeconds { get; private set; }
     public int SpawnCount { get; private set; }
@@ -21,11 +24,43 @@ public class GameManager : Singleton<GameManager>
     {
         base.Initialize();
         CommunicatorFactory.Enabled = false;
+        Time.timeScale = 1f;
+        _runEnded = false;
         _runStartTime = Time.time;
+    }
+
+    private void Start()
+    {
+        TryShowLevelStory();
+    }
+
+    private void TryShowLevelStory()
+    {
+        if (_level < 1 || _level > 3)
+            return;
+
+        var progress = UserDataStore.Load().GetLevel(_level);
+        if (progress.IsFirstEntry)
+            return;
+
+        if (_storyUI == null)
+            _storyUI = FindFirstObjectByType<StoryUI>();
+
+        if (_storyUI == null)
+            return;
+
+        _storyUI.Show();
+        UserDataStore.MarkLevelFirstEntryComplete(_level);
     }
 
     public void EndGame(bool isWin)
     {
+        if (_runEnded)
+            return;
+
+        _runEnded = true;
+        Time.timeScale = 1f;
+
         PlayTimeSeconds = Time.time - _runStartTime;
 
         var spawner = _obstacleSpawner != null
@@ -36,18 +71,29 @@ public class GameManager : Singleton<GameManager>
         var agent = _gameAgent != null ? _gameAgent : FindFirstObjectByType<GameAgent>();
         HitCount = agent != null ? agent.HitCount : 0;
 
+        if (_gameEndUI == null)
+            _gameEndUI = FindFirstObjectByType<GameEndUI>();
+
+        if (_gameEndUI == null)
+        {
+            Debug.LogWarning("[GameManager] GameEndUI not found.");
+            return;
+        }
+
         if (isWin)
         {
-            _gameEndUI.Show(new GameEndData
+            var winData = new GameEndData
             {
                 IsWin = true,
                 PlayTimeSeconds = PlayTimeSeconds,
                 SpawnCount = SpawnCount,
                 HitCount = HitCount
-            });
+            };
+
+            _gameEndUI.Show(winData, stars => UserDataStore.RecordLevelWin(_level, stars));
         }
         else
-        {   
+        {
             _gameEndUI.Show(new GameEndData
             {
                 IsWin = false,
@@ -79,6 +125,9 @@ public class GameManager : Singleton<GameManager>
         }
 
         _gameEndUI.ShowPreview(isWin, starCount);
+
+        if (isWin)
+            UserDataStore.RecordLevelWin(_level, starCount);
     }
 #endif
 }
