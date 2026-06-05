@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5237e1a909175e4ab0ef8538e060b05, type: 3}
   m_Name: ClimberVer2RewardWeightConfig 1
   m_EditorClassIdentifier: Assembly-CSharp::ClimberVer2RewardWeightConfig
-  _platformLandingReward: 0.01
+  _platformLandingReward: 0.2
   _platformLandingRecoveryReward: 0
-  _platformLandingDownPenalty: 0
+  _platformLandingDownPenalty: -0.01
   _goalReachedReward: 1
   _goalDistanceProgressReward: 0
   _deadPenalty: -1
   _hitPenalty: -0.1
-  _platformStallPenaltyPerDecision: 0
+  _platformStallPenaltyPerDecision: -0.001
   _platformStallTimeSeconds: 3
   _minLandingHeightDelta: 0.05

@@ -18,7 +18,7 @@ MonoBehaviour:
   _recycleBelowWorldY: -20
   _recycleBelowTargetOffsetY: 5
   _faller:
-    _fallSpeed: 5
+    _fallSpeed: 6
     _spawnCooldownSeconds: 0.8
   _bouncer:
     _launchSpeed: 8
@@ -29,7 +29,8 @@ MonoBehaviour:
     _castRadius: 0.5
     _surfaceSkin: 0.02
     _wallBounceDamping: 1
-    _spawnCooldownSeconds: 1.5
+    _spawnCooldownSeconds: 2
+    _minLaunchDownAngleFromHorizontalDegrees: 15
   _roller:
     _rollSpeed: 3
     _gravityScale: 1
@@ -43,4 +44,4 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 256
     _surfaceSkin: 0.02
-    _spawnCooldownSeconds: 5
+    _spawnCooldownSeconds: 3

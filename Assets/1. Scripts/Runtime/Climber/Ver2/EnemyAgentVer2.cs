@@ -56,6 +56,8 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     private float _bestDistToGoal;
     private int _lastLandingPlatformInstanceId;
     private int _platformLandingsThisEpisode;
+    private int _obstacleHitsThisEpisode;
+    private int _goalReachedHealthThisEpisode;
     private bool _skipNextEpisodeStatsReport = true;
     private int _stallPlatformInstanceId;
     private float _platformStallElapsed;
@@ -130,6 +132,8 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
     {
         ReportEpisodeStats();
         _platformLandingsThisEpisode = 0;
+        _obstacleHitsThisEpisode = 0;
+        _goalReachedHealthThisEpisode = -1;
 
         _moveInput = ClimberMoveInput.Zero;
         _isInvincible = false;
@@ -263,7 +267,16 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
             return;
 
         _groundChecker.Refresh();
+        ApplySurvivalReward();
         ApplyPlatformStallPenalty();
+    }
+
+    private void ApplySurvivalReward()
+    {
+        if (_rewardWeights.SurvivalRewardPerDecision == 0f || _health <= 0)
+            return;
+
+        AddReward(_rewardWeights.SurvivalRewardPerDecision);
     }
 
     private void ResetPlatformStallTracking()
@@ -395,6 +408,22 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
             "Environment/PlatformLandingsPerEpisode",
             _platformLandingsThisEpisode,
             StatAggregationMethod.MostRecent);
+        RecordStat(
+            "Environment/ObstacleHitsPerEpisode",
+            _obstacleHitsThisEpisode,
+            StatAggregationMethod.MostRecent);
+        RecordStat(
+            "Environment/ObstacleHitsPerEpisodeSum",
+            _obstacleHitsThisEpisode,
+            StatAggregationMethod.Sum);
+
+        if (_goalReachedHealthThisEpisode >= 0)
+        {
+            RecordStat(
+                "Environment/GoalReachedHealth",
+                _goalReachedHealthThisEpisode,
+                StatAggregationMethod.MostRecent);
+        }
     }
 
     private static void RecordStat(string key, float value, StatAggregationMethod aggregation)
@@ -427,6 +456,7 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
 
     public void NotifyGoalReached()
     {
+        _goalReachedHealthThisEpisode = _health;
         if (_rewardWeights != null)
             AddReward(_rewardWeights.GoalReachedReward);
         EndEpisode();
@@ -518,7 +548,10 @@ public class EnemyAgentVer2 : Agent, IClimberAgent
         _health -= amount;
 
         if (amount == ObstacleHitDamage)
+        {
+            _obstacleHitsThisEpisode++;
             ApplyHitPenalty();
+        }
 
         if (_health > 0)
         {

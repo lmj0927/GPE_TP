@@ -20,7 +20,7 @@ MonoBehaviour:
   _hitStunDuration: 1
   _maxHealth: 5
   _groundCheckBoxHeight: 0.1
-  _groundCheckBoxLength: 1
+  _groundCheckBoxLength: 0.8
   _jumpBufferFrames: 8
   _groundLayers:
     serializedVersion: 2

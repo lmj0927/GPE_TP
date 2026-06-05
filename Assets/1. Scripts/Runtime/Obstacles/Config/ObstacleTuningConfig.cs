@@ -49,8 +49,10 @@ public sealed class ObstacleTuningConfig : ScriptableObject
         [SerializeField] private float _surfaceSkin = 0.02f;
         [SerializeField] private float _wallBounceDamping = 1f;
         [SerializeField] private float _spawnCooldownSeconds = 2f;
+        [SerializeField, Range(0f, 89f)] private float _minLaunchDownAngleFromHorizontalDegrees = 15f;
 
         public float LaunchSpeed => _launchSpeed;
+        public float MinLaunchDownAngleFromHorizontalDegrees => _minLaunchDownAngleFromHorizontalDegrees;
         public float LaunchAngleDegrees => _launchAngleDegrees;
         public LayerMask WallLayers => _wallLayers;
         public float CastRadius => _castRadius;
