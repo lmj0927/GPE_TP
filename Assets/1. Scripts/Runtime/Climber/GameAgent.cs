@@ -109,11 +109,15 @@ public sealed class GameAgent : Agent, IClimberAgent
         _stateMachine.Initialize(startState);
         SyncAnimatorGround(startState == ClimberStateId.Grounded);
         RefreshStageSpan();
+        BeginRun();
     }
 
-    public override void OnEpisodeBegin()
+    public override void OnEpisodeBegin() => BeginRun();
+
+    private void BeginRun()
     {
         _gameEnded = false;
+        _hitCount = 0;
         _moveInput = ClimberMoveInput.Zero;
         _isInvincible = false;
         _jumpBufferFrames = 0;
@@ -129,7 +133,15 @@ public sealed class GameAgent : Agent, IClimberAgent
             _rigidbody.simulated = true;
         }
 
-        _risingLava?.ResetToStart();
+        if (_risingLava == null)
+            _risingLava = FindFirstObjectByType<RisingLava>();
+
+        if (_risingLava != null)
+        {
+            _risingLava.CaptureStartPosition();
+            _risingLava.ResetToStart();
+        }
+
         RefreshStageSpan();
 
         _groundChecker.Refresh();
@@ -290,7 +302,10 @@ public sealed class GameAgent : Agent, IClimberAgent
 
         _gameEnded = true;
         _moveInput = ClimberMoveInput.Zero;
-        GameManager.Instance.EndGame(true);
+        _risingLava?.StopRising();
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.EndGame(true);
     }
 
     private void EndGameLoss()
@@ -300,7 +315,10 @@ public sealed class GameAgent : Agent, IClimberAgent
 
         _gameEnded = true;
         _moveInput = ClimberMoveInput.Zero;
-        GameManager.Instance.EndGame(false);
+        _risingLava?.StopRising();
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.EndGame(false);
     }
 
     private IEnumerator EndInvincibilityCoroutine()

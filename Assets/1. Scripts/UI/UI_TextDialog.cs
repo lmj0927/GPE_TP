@@ -116,22 +116,20 @@ public class UI_TextDialog : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(currentText))
         {
-            // 텍스트 타이핑이 진행 중이면 즉시 최종 텍스트로 완료
             if (textTween != null && textTween.IsActive())
             {
-                // 텍스트 트윈 즉시 완료
                 textTween.Complete();
+
+                if (textComponent != null)
+                    textComponent.text = currentText;
+
                 return;
             }
-            
-            // 텍스트 타이핑이 완료된 경우에만 클릭 처리
-            // textTween이 null이거나 IsActive()가 false면 타이핑 완료 상태
+
             if (textTween == null || !textTween.IsActive())
             {
-                // 이벤트 발생 (현재 키값 전달)
                 OnTextBalloonClicked?.Invoke(currentText);
-                
-                // 자동으로 말풍선을 닫도록 설정된 경우에만 Hide
+
                 if (autoHideOnClick)
                 {
                     Hide();
@@ -273,7 +271,7 @@ public class UI_TextDialog : MonoBehaviour
     private void ChangeText(string text)
     {
         currentText = text;
-        KillTextTween();
+        KillTweens();
         
         if (textComponent != null)
         {

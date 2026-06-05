@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,21 +15,7 @@ public class StoryUI : MonoBehaviour
     [SerializeField] private List<StoryData> storyData;
 
     private int _currentIndex;
-
-    private void Start()
-    {
-        characterImage.gameObject.SetActive(false);
-        bossImage.gameObject.SetActive(false);
-
-        StartCoroutine(DelayedShow());
-    }
-
-    private System.Collections.IEnumerator DelayedShow()
-    {
-        yield return new WaitForEndOfFrame();
-
-        Show();
-    }
+    private Coroutine _showCoroutine;
 
     public void Show()
     {
@@ -38,14 +25,35 @@ public class StoryUI : MonoBehaviour
         if (storyDialog == null)
             return;
 
+        gameObject.SetActive(true);
+
+        if (_showCoroutine != null)
+            StopCoroutine(_showCoroutine);
+
+        _showCoroutine = StartCoroutine(ShowAfterLayout());
+    }
+
+    private IEnumerator ShowAfterLayout()
+    {
+        yield return new WaitForEndOfFrame();
+
+        if (storyDialog != null)
+            storyDialog.gameObject.SetActive(true);
+
+        if (characterImage != null)
+            characterImage.gameObject.SetActive(false);
+
+        if (bossImage != null)
+            bossImage.gameObject.SetActive(false);
+
         storyDialog.SetAutoHideOnClick(false);
         BindDialogClick();
 
         _currentIndex = 0;
-        
+        Time.timeScale = 0f;
         DisplayLine(_currentIndex);
+        _showCoroutine = null;
     }
-
     public void Hide()
     {
         UnbindDialogClick();
@@ -59,7 +67,7 @@ public class StoryUI : MonoBehaviour
         if (bossImage != null)
             bossImage.gameObject.SetActive(false);
 
-        
+        Time.timeScale = 1;
     }
 
     private void BindDialogClick()
@@ -90,6 +98,12 @@ public class StoryUI : MonoBehaviour
         }
 
         DisplayLine(_currentIndex);
+    }
+
+    private void OnDestroy()
+    {
+        if (Time.timeScale == 0f)
+            Time.timeScale = 1f;
     }
 
     private void DisplayLine(int index)

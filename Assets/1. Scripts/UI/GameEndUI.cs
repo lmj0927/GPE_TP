@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameEndUI : MonoBehaviour
 {
@@ -51,14 +53,17 @@ public class GameEndUI : MonoBehaviour
 
     private void OnExitButtonClicked()
     {
-        // TODO : Go to main menu
+        Time.timeScale = 1f;
+        MenuController.ReturnFromGame();
+        SceneManager.LoadScene("MainMenu");
     }
 
-    public void Show(GameEndData gameEndData) => ShowInternal(gameEndData, null);
+    public void Show(GameEndData gameEndData, Action<int> onWinStarsCalculated = null) =>
+        ShowInternal(gameEndData, null, onWinStarsCalculated);
 
     /// <summary>Play-mode preview. <paramref name="starCount"/> is 1–3 on win, ignored on loss.</summary>
     public void ShowPreview(bool isWin, int starCount) =>
-        ShowInternal(CreatePreviewData(isWin, starCount), isWin ? Mathf.Clamp(starCount, 1, 3) : 0);
+        ShowInternal(CreatePreviewData(isWin, starCount), isWin ? Mathf.Clamp(starCount, 1, 3) : 0, null);
 
     private static GameEndData CreatePreviewData(bool isWin, int starCount)
     {
@@ -81,7 +86,7 @@ public class GameEndUI : MonoBehaviour
         };
     }
 
-    private void ShowInternal(GameEndData gameEndData, int? forcedStarCount)
+    private void ShowInternal(GameEndData gameEndData, int? forcedStarCount, Action<int> onWinStarsCalculated)
     {
         KillShowSequence();
         gameObject.SetActive(true);
@@ -107,6 +112,9 @@ public class GameEndUI : MonoBehaviour
                 stars = CalculateStars(_score);
             }
         }
+
+        if (gameEndData.IsWin && onWinStarsCalculated != null)
+            onWinStarsCalculated.Invoke(stars);
 
         PrepareStarsForShow(stars);
         _showSequence = DOTween.Sequence().SetUpdate(true);

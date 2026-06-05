@@ -18,7 +18,9 @@ public class GameManagerEditor : Editor
         {
             if (!Application.isPlaying)
             {
-                EditorGUILayout.HelpBox("Play 모드에서 종료 UI 연출을 미리 볼 수 있습니다.", MessageType.Info);
+                EditorGUILayout.HelpBox(
+                    "Play 모드에서 종료 UI 연출을 미리 볼 수 있습니다. 승리 버튼은 UserData 클리어도 저장합니다.",
+                    MessageType.Info);
             }
 
             if (GUILayout.Button("3성 승리", GUILayout.Height(28)))
