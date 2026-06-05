@@ -3898,7 +3898,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[1].characterType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[2].characterType

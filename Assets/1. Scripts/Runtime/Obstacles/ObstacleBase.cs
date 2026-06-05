@@ -123,25 +123,6 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
             Rigidbody.linearVelocity = velocity;
     }
 
-    protected void IgnoreEnemyCollisions(Collider2D physicsCollider)
-    {
-        if (physicsCollider == null || _tuning == null)
-            return;
-
-        var colliders = FindObjectsByType<Collider2D>(FindObjectsSortMode.None);
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            var col = colliders[i];
-            if (col == null || col == physicsCollider || col == _hitTrigger)
-                continue;
-
-            if (!IsEnemyLayer(col.gameObject.layer))
-                continue;
-
-            Physics2D.IgnoreCollision(physicsCollider, col, true);
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (_hitConsumed || _hitTrigger == null || other == _hitTrigger)

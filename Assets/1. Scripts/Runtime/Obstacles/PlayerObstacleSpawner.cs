@@ -2,7 +2,6 @@ using UnityEngine;
 
 /// <summary>
 /// Villain obstacle spawn entry point. Enforces per-type cooldown from <see cref="ObstacleTuningConfig"/>.
-/// Does not affect <see cref="ObstacleSpawnTest"/>.
 /// </summary>
 public sealed class PlayerObstacleSpawner : MonoBehaviour
 {
