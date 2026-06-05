@@ -17,6 +17,6 @@ MonoBehaviour:
   _spawnHeightOffset: 30
   _bouncerMinDownTiltDegrees: 60
   _bouncerMaxDownTiltDegrees: 80
-  _fallerEnabled: 0
-  _bouncerEnabled: 0
-  _rollerEnabled: 0
+  _fallerEnabled: 1
+  _bouncerEnabled: 1
+  _rollerEnabled: 1
