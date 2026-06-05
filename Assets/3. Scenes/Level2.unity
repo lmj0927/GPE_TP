@@ -3765,7 +3765,7 @@ PrefabInstance:
       objectReference: {fileID: -5348964243515120429, guid: d7c16db5c4150fe478dc18401f5474b6, type: 2}
     - target: {fileID: 2437369922138902984, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_hasFontAssetChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5051900136330526951, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_Pivot.x
@@ -3857,43 +3857,76 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.size
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[0].text
-      value: "\uD0D1\uC774... \uD615\uD0DC\uB97C \uBC14\uAFE8\uB2E4\uACE0? \uC544\uBB34\uB9AC
-        \uBC29\uD574\uD574\uB3C4 \uC18C\uC6A9\uC5C6\uB2E4. \uAE30\uC5B4\uCF54 \uC62C\uB77C\uAC00
-        \uC190\uC744 \uC7A1\uC744 \uAC83\uC774\uB2E4!"
+      value: "\uD558\uC544... \uD558\uC544... \uACA8\uC6B0 \uC815\uC2E0\uC744 \uCC28\uB838\uAD70.
+        \uACF5\uC8FC\uB2D8! \uC81C \uBAA9\uC18C\uB9AC\uAC00 \uB4E4\uB9AC\uC2ED\uB2C8\uAE4C?!
+        \uC870\uAE08\uB9CC \uB354 \uBC84\uD168\uC8FC\uC2ED\uC2DC\uC624!"
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[1].text
-      value: "\uB048\uC9C8\uAE34 \uBC8C\uB808 \uAC19\uC73C\uB2C8. 1\uCE35\uC758 \uC2DC\uB828\uC744
-        \uBC84\uD168\uB0C8\uB2E4\uACE0 \uC790\uB9CC\uD558\uC9C0 \uB9C8\uB77C. \uC758\uC2DD\uC774
-        2\uB2E8\uACC4\uC5D0 \uC811\uC5B4\uB4E4\uC5C8\uB2E4. \uACF5\uC8FC\uC758 \uC0DD\uBA85\uB825\uC774
-        \uC800\uC8FC\uB85C \uCE58\uD658\uB420\uC218\uB85D \uB108\uC640 \uACF5\uC8FC\uC758
-        \uAC70\uB9AC\uB294 \uC601\uC6D0\uD788 \uBA40\uC5B4\uC9C8 \uAC83\uC774\uB2E4.
-        \uC790, \uBD89\uC740 \uC6A9\uC554 \uC18D\uC5D0\uC11C \uC808\uB9DD\uD574\uB77C."
+      value: "\uC6A9\uC0AC\u2026\u2026.....\uB2D8\u2026\u2026 \uC81C\uBC1C\u2026\u2026 "
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[2].text
-      value: "\uC6A9\uC0AC\uC5EC... \uC81C\uBC1C \uB4A4\uB97C \uB3CC\uC544 \uB3C4\uB9DD\uCE58\uC138\uC694...
-        \uC81C \uBAB8\uC774... \uC810\uC810 \uB728\uAC70\uC6CC\uC9C0\uACE0 \uC788\uC5B4\uC694..."
+      value: "\uACF5\uC8FC\uB2D8\uC758 \uBAA9\uC18C\uB9AC\uAC00 \uD76C\uBBF8\uD574\uC9C0\uACE0
+        \uC788\uC5B4...! \uC800\uC8FC\uAC00 \uB354 \uC9C4\uD589\uB418\uAE30 \uC804\uC5D0
+        \uC800 \uC0AC\uC545\uD55C \uB9C8\uC655 \uB188\uC758 \uBAA9\uC744 \uCCD0\uC57C
+        \uD55C\uB2E4!"
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[3].text
-      value: dasdasdsadas
+      value: "(\uC544\uB2C8, \uBD84\uBA85\uD788 \uB0B4 \uADC0\uD55C \uC790\uC7AC\uB4E4\uC744
+        \uB358\uC838\uC11C \uD53C\uB5A1\uC744 \uB9CC\uB4E4\uC5B4 \uB1A8\uB294\uB370
+        \uC5B4\uB5BB\uAC8C \uBC8C\uC368 \uAE68\uC5B4\uB098\uC11C \uB610 \uAE30\uC5B4\uC62C\uB77C\uC624\uB294
+        \uAC70\uC57C?! )"
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[4].text
-      value: dasdasdsadas
+      value: "\uD6E0\uD6E0\uD6E0... \uACA8\uC6B0 1\uB2E8\uACC4\uB97C \uBC84\uD168\uB0B4\uACE0
+        \uC0B4\uC544\uB0A8\uC558\uAD6C\uB098, \uAC00\uB828\uD55C \uC778\uAC04\uC774\uC5EC.
+        \uD558\uC9C0\uB9CC \uB2E4\uC74C \uC800\uC8FC\uC758 \uC758\uC2DD\uC774 \uC2DC\uC791\uB418\uBA74
+        \uB108\uC758 \uADF8 \uD558\uCC2E\uC740 \uD76C\uB9DD\uB3C4 \uC644\uC804\uD788
+        \uC870\uAC01\uB0A0 \uAC83\uC774\uB2E4."
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[5].text
+      value: "(\uCBE7... \uADF8\uB098\uC800\uB098 1\uCE35\uC5D0\uC11C \uC790\uC7AC\uB97C
+        \uB108\uBB34 \uD391\uD391 \uC37C\uB354\uB2C8 \uCC3D\uACE0\uC5D0 \uC4F8 \uB9CC\uD55C
+        \uBC29\uD574\uBB3C \uC790\uC7AC\uAC00 \uBC8C\uC368 \uBC18\uD1A0\uB9C9\uC774
+        \uB0AC\uC796\uC544? \uC788\uB294 \uAC70\uB77C\uB3C4 \uC950\uC5B4\uC9DC\uC11C
+        \uB358\uC838\uC57C\uACA0\uAD70...)"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[6].text
+      value: "\uB450 \uBC88\uC9F8 \uC800\uC8FC\uC758 \uC758\uC2DD\uC744 \uC2DC\uC791\uD55C\uB2E4!
+        \uAC10\uD788 \uC774 \uC704\uB85C \uC62C\uB77C\uC624\uC9C0\uB9C8\uC655!!"
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[1].characterType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[2].characterType
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[3].characterType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[4].characterType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[5].characterType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[6].characterType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9195563706846626609, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_IsActive

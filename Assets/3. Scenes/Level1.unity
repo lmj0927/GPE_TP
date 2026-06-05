@@ -3857,36 +3857,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[0].text
-      value: "\uACF5\uC8FC\uB2D8...! \uC870\uAE08\uB9CC \uAE30\uB2E4\uB9AC\uC2ED\uC2DC\uC624.
-        \uC774 \uD0D1\uC758 \uAF2D\uB300\uAE30\uC5D0\uC11C \uBC18\uB4DC\uC2DC \uB2F9\uC2E0\uC744
-        \uAD6C\uCD9C\uD574\uB0B4\uACA0\uC2B5\uB2C8\uB2E4!"
+      value: "\uACF5\uC8FC\uB2D8! \uC81C \uBAA9\uC18C\uB9AC\uAC00 \uB4E4\uB9AC\uC2ED\uB2C8\uAE4C?!
+        \uC774 \uD0D1 \uAF2D\uB300\uAE30\uC5D0 \uACC4\uC2E0 \uAC8C \uB9DE\uB098\uC694?!"
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[1].text
-      value: "\uC544\uC544... \uC624\uC9C0 \uB9C8\uC138\uC694, \uC6A9\uC0AC\uC5EC...
-        \uC81C\uAC8C \uB2FF\uC544\uC11C\uB294 \uC548 \uB429\uB2C8\uB2E4... \uC774
-        \uBAB8\uC5D0 \uAE43\uB4E0 \uC800\uC8FC\uAC00 \uB2F9\uC2E0\uC744..."
+      value: "\u2026\u2026."
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[2].text
-      value: "\uD558\uCC2E\uC740 \uC778\uAC04 \uB188\uB4E4\uC774 \uAC10\uB3D9\uC801\uC778
-        \uC7AC\uD68C\uB77C\uB3C4 \uAFC8\uAFB8\uB294 \uBAA8\uC591\uC774\uAD6C\uB098.
+      value: "\uD558\uCC2E\uC740 \uC778\uAC04 \uB188\uC774 \uC138\uACC4\uB97C \uAD6C\uD560
+        \uC601\uC6C5\uC774\uB77C\uB3C4 \uAFC8\uAFB8\uB294 \uBAA8\uC591\uC774\uAD6C\uB098.
         \uC6A9\uC0AC\uC5EC, \uB124\uB188\uC774 \uC800 \uAF2D\uB300\uAE30\uC5D0 \uB3C4\uB2EC\uD558\uAE30
         \uC804\uC5D0 \uB0B4 \uC2EC\uBCF5\uB4E4\uC774 \uB124 \uC0AC\uC9C0\uB97C \uCC22\uC5B4\uB193\uC744
-        \uAC83\uC774\uB2E4. \uC758\uC2DD\uC758 \uCCAB \uBC88\uC9F8 \uACF5\uBB3C\uC744
-        \uBC14\uCCD0\uB77C!"
+        \uAC83\uC774\uB2E4!"
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[3].text
-      value: dasdasdsadas
+      value: "\uB9C8\uC655! \uB124 \uC774\uB188! \uC778\uAC04 \uC138\uC0C1\uC744
+        \uC774 \uC9C0\uACBD\uC73C\uB85C \uB9CC\uB4E4\uC5B4 \uB193\uACE0 \uBB34\uC0AC\uD560
+        \uC904 \uC54C\uC558\uB354\uB0D0! \uB2F9\uC7A5 \uCE58\uC0AC\uD558\uAC8C \uC228\uC9C0
+        \uB9D0\uACE0 \uB098\uC640\uB77C!!"
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.data[4].text
-      value: dasdasdsadas
+      value: "\uD6E0\uD6E0\uD6E0, \uC5EC\uAE30\uAE4C\uC9C0 \uC624\uBA74 \uB098\uC640
+        \uC9C1\uC811 \uC2F8\uC6B8 \uC218 \uC788\uC744 \uAC70\uB77C \uC0DD\uAC01\uD588\uB098\uBCF4\uC9C0?
+        \uB098\uC758 \uAC15\uB825\uD55C \uC5FC\uB825\uC73C\uB85C \uB124\uB188\uCBE4\uC740
+        \uB208 \uAC10\uACE0\uB3C4 \uC5C6\uC568 \uC218 \uC788\uB2E4. \uC758\uC2DD\uC758
+        \uCCAB \uBC88\uC9F8 \uACF5\uBB3C\uC744 \uBC14\uCCD0\uB77C!!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[3].characterType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
+      propertyPath: storyData.Array.data[4].characterType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9195563706846626609, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_IsActive

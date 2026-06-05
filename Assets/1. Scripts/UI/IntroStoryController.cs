@@ -18,13 +18,15 @@ public class IntroStoryController : MonoBehaviour
     public float fadeDuration = 1.0f;   // 페이드 인/아웃 걸리는 시간 (1초)
     public float textSpeed = 0.05f;     // 한 글자씩 나오는 속도 (낮을수록 빠름)
 
+    // 확정된 5문장 인트로 스토리 배열
     private string[] dialogues = new string[]
     {
-     // 1. 첫 번째 자막 (핏빛 배경에서 시작)
-     "하늘이 핏빛으로 물들고, 대지에 심연의 구멍이 뚫렸다. 마왕이 공주를 제물 삼아 대의식을 시작했기 때문이다. 나라의 모든 군대가 전멸한 가운데, 오직 한 사람... 성검을 쥔 용사만이 공주를 구하고 저주를 끊기 위해 마왕성의 탑으로 진입했다.", 
-     "(마왕은 최상층 옥좌에서 비웃으며 아래를 내려다본다.)", 
-     // 3. 세 번째 자막 (또 클릭하면 나오는 마지막 자막)
-     "\"의식이 완성될 때까지, 저 불나방 같은 침입자의 숨통을 끊어놓아라.\""
+        "\"인간들의 왕국이 모두 멸망하고, 대륙에는 오직 성검을 쥔 마지막 용사만이 남았다.\"",
+        "\"녀석은 인류의 마지막 염원을 품고, 공주를 구하기 위해 이곳 마왕성의 탑으로 난입했다.\"",
+        "\"하지만... 정작 이 성의 주인인 나, 마왕은 최상층 옥좌에 앉아 깊은 한숨을 쉬고 있다.\"",
+        "\"인간 세상을 너무 철저하게 박살 낸 탓에, 마왕성에 자재를 납품해 줄 상단과 일꾼들까지 전부 전멸해 버린 것이다!\"",
+        "\"그래도 용사만 막는다면 공주에게 건 저주가 완성되어 세상을 완전히 멸망시킬 것이다. 하하하하하하!\"",
+        "\"끈질기게 기어 올라오는 불나방 같은 녀석... 절대로 이 위까지 올라오지마왕!\""
     };
 
     private int currentIndex = 0;
@@ -43,7 +45,7 @@ public class IntroStoryController : MonoBehaviour
     {
         if (isFading) return;
 
-        // 마우스 왼쪽 버튼을 클릭했을 때의 로직 (팀장님 스타일 완성)
+        // 마우스 왼쪽 버튼을 클릭했을 때의 로직
         if (Input.GetMouseButtonDown(0))
         {
             // 1. 아직 글자가 출력 중일 때 클릭하면 ➡️ 한 번에 다 보여주기!
@@ -72,8 +74,9 @@ public class IntroStoryController : MonoBehaviour
         isTypingComplete = false;
         storyText.text = ""; // 먼저 글 상자를 비웁니다.
 
-        // 배경 교체 타이밍 체크 (팀장님 로직 유지)
-        if (currentIndex == 1 && demonKingSprite != null)
+        // [배경 교체 타이밍 수정] 
+        // 3번째 대사("하지만... 정작 이 성의 주인인 나, 마왕은~")가 시작될 때 마왕 일러스트로 교체합니다.
+        if (currentIndex == 2 && demonKingSprite != null)
         {
             backgroundImage.sprite = demonKingSprite;
         }
