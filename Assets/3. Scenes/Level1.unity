@@ -2614,8 +2614,8 @@ MonoBehaviour:
   _fallerSprite: {fileID: 21300000, guid: 117bf43d9cf43fa408535ede83b23160, type: 3}
   _bouncerSprite: {fileID: 21300000, guid: 23f34f224bd0aed4d96db5e9cb6b5f27, type: 3}
   _rollerSprite: {fileID: 21300000, guid: cfdc72cf830b34244842e14d18452e5c, type: 3}
-  _alpha: 0.8
-  _maxCursorSize: 32
+  _alpha: 0.9
+  _maxCursorSize: 28
   _hotspotNormalized: {x: 0.5, y: 0.5}
 --- !u!4 &1216729703
 Transform:
