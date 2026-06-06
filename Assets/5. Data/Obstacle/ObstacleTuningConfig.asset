@@ -19,7 +19,7 @@ MonoBehaviour:
   _recycleBelowTargetOffsetY: 5
   _faller:
     _fallSpeed: 6
-    _spawnCooldownSeconds: 0.8
+    _spawnCooldownSeconds: 1.2
   _bouncer:
     _launchSpeed: 8
     _launchAngleDegrees: 315

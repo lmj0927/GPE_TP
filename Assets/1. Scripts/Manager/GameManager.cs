@@ -90,17 +90,19 @@ public class GameManager : Singleton<GameManager>
                 HitCount = HitCount
             };
 
-            _gameEndUI.Show(winData, stars => UserDataStore.RecordLevelWin(_level, stars));
+            _gameEndUI.Show(winData, _level);
         }
         else
         {
-            _gameEndUI.Show(new GameEndData
-            {
-                IsWin = false,
-                PlayTimeSeconds = PlayTimeSeconds,
-                SpawnCount = SpawnCount,
-                HitCount = HitCount
-            });
+            _gameEndUI.Show(
+                new GameEndData
+                {
+                    IsWin = false,
+                    PlayTimeSeconds = PlayTimeSeconds,
+                    SpawnCount = SpawnCount,
+                    HitCount = HitCount
+                },
+                _level);
         }
     }
 
@@ -124,10 +126,7 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        _gameEndUI.ShowPreview(isWin, starCount);
-
-        if (isWin)
-            UserDataStore.RecordLevelWin(_level, starCount);
+        _gameEndUI.ShowPreview(isWin, starCount, _level);
     }
 #endif
 }

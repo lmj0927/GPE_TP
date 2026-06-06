@@ -8,7 +8,9 @@ public class LevelProgress
     /// <summary>false = 해당 레벨 최초 진입(스토리 미표시), true = 이미 진입한 적 있음.</summary>
     public bool IsFirstEntry;
     public bool IsCleared;
-    public bool IsThreeStarCleared;
+
+    /// <summary>0 = 미클리어, 1–3 = 최고 달성 별 개수.</summary>
+    public int Star;
 }
 
 [Serializable]
@@ -47,7 +49,7 @@ public static class UserDataPrefsKeys
 
     public static string LevelFirstEntry(int level) => $"{Prefix}Level{level}_FirstEntry";
     public static string LevelCleared(int level) => $"{Prefix}Level{level}_Cleared";
-    public static string LevelThreeStar(int level) => $"{Prefix}Level{level}_ThreeStar";
+    public static string LevelStar(int level) => $"{Prefix}Level{level}_Star";
 
     public static IEnumerable<string> GetAllManagedKeys()
     {
@@ -55,16 +57,9 @@ public static class UserDataPrefsKeys
         {
             yield return LevelFirstEntry(level);
             yield return LevelCleared(level);
-            yield return LevelThreeStar(level);
+            yield return LevelStar(level);
         }
     }
-}
-
-public enum UserDataBoolStorageFormat
-{
-    IntZeroOne,
-    IntOneZero,
-    StringTrueFalse
 }
 
 public static class UserDataStore
@@ -77,9 +72,9 @@ public static class UserDataStore
         {
             data.SetLevel(level, new LevelProgress
             {
-                IsFirstEntry = ReadBool(UserDataPrefsKeys.LevelFirstEntry(level), UserDataBoolStorageFormat.IntZeroOne),
-                IsCleared = ReadBool(UserDataPrefsKeys.LevelCleared(level), UserDataBoolStorageFormat.IntZeroOne),
-                IsThreeStarCleared = ReadBool(UserDataPrefsKeys.LevelThreeStar(level), UserDataBoolStorageFormat.IntZeroOne)
+                IsFirstEntry = ReadBool(UserDataPrefsKeys.LevelFirstEntry(level)),
+                IsCleared = ReadBool(UserDataPrefsKeys.LevelCleared(level)),
+                Star = ReadStar(UserDataPrefsKeys.LevelStar(level))
             });
         }
 
@@ -91,9 +86,9 @@ public static class UserDataStore
         for (int level = 1; level <= 3; level++)
         {
             var progress = data.GetLevel(level);
-            WriteBool(UserDataPrefsKeys.LevelFirstEntry(level), progress.IsFirstEntry, UserDataBoolStorageFormat.IntZeroOne);
-            WriteBool(UserDataPrefsKeys.LevelCleared(level), progress.IsCleared, UserDataBoolStorageFormat.IntZeroOne);
-            WriteBool(UserDataPrefsKeys.LevelThreeStar(level), progress.IsThreeStarCleared, UserDataBoolStorageFormat.IntZeroOne);
+            WriteBool(UserDataPrefsKeys.LevelFirstEntry(level), progress.IsFirstEntry);
+            WriteBool(UserDataPrefsKeys.LevelCleared(level), progress.IsCleared);
+            WriteStar(UserDataPrefsKeys.LevelStar(level), progress.Star);
         }
 
         PlayerPrefs.Save();
@@ -110,9 +105,7 @@ public static class UserDataStore
         var data = Load();
         var progress = data.GetLevel(level);
         progress.IsCleared = true;
-
-        if (starCount >= 3)
-            progress.IsThreeStarCleared = true;
+        progress.Star = Mathf.Max(progress.Star, Mathf.Clamp(starCount, 0, 3));
 
         data.SetLevel(level, progress);
         Save(data);
@@ -144,8 +137,6 @@ public static class UserDataStore
         PlayerPrefs.Save();
     }
 
-    public static bool HasKey(string key) => PlayerPrefs.HasKey(key);
-
     public static void DeleteKey(string key)
     {
         if (!PlayerPrefs.HasKey(key))
@@ -154,49 +145,14 @@ public static class UserDataStore
         PlayerPrefs.DeleteKey(key);
     }
 
-    public static bool ReadBool(string key, UserDataBoolStorageFormat format)
-    {
-        if (!PlayerPrefs.HasKey(key))
-            return false;
+    private static bool ReadBool(string key) => PlayerPrefs.GetInt(key, 0) != 0;
 
-        return format switch
-        {
-            UserDataBoolStorageFormat.IntZeroOne => PlayerPrefs.GetInt(key, 0) != 0,
-            UserDataBoolStorageFormat.IntOneZero => PlayerPrefs.GetInt(key, 1) == 0,
-            UserDataBoolStorageFormat.StringTrueFalse => PlayerPrefs.GetString(key, "false")
-                .Equals("true", StringComparison.OrdinalIgnoreCase),
-            _ => false
-        };
-    }
+    private static void WriteBool(string key, bool value) =>
+        PlayerPrefs.SetInt(key, value ? 1 : 0);
 
-    public static void WriteBool(string key, bool value, UserDataBoolStorageFormat format)
-    {
-        switch (format)
-        {
-            case UserDataBoolStorageFormat.IntZeroOne:
-                PlayerPrefs.SetInt(key, value ? 1 : 0);
-                break;
-            case UserDataBoolStorageFormat.IntOneZero:
-                PlayerPrefs.SetInt(key, value ? 0 : 1);
-                break;
-            case UserDataBoolStorageFormat.StringTrueFalse:
-                PlayerPrefs.SetString(key, value ? "true" : "false");
-                break;
-        }
-    }
+    private static int ReadStar(string key) =>
+        Mathf.Clamp(PlayerPrefs.GetInt(key, 0), 0, 3);
 
-    public static string DescribeStoredValue(string key)
-    {
-        if (!PlayerPrefs.HasKey(key))
-            return "(missing)";
-
-        string stringValue = PlayerPrefs.GetString(key, string.Empty);
-        if (stringValue.Equals("true", StringComparison.OrdinalIgnoreCase)
-            || stringValue.Equals("false", StringComparison.OrdinalIgnoreCase))
-        {
-            return $"string=\"{stringValue}\"";
-        }
-
-        return $"int={PlayerPrefs.GetInt(key)}";
-    }
+    private static void WriteStar(string key, int star) =>
+        PlayerPrefs.SetInt(key, Mathf.Clamp(star, 0, 3));
 }

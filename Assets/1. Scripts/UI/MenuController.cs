@@ -68,6 +68,28 @@ public class MenuController : MonoBehaviour
         SetButtonInteractable(_level1Button, true);
         SetButtonInteractable(_level2Button, userData.Level1.IsCleared);
         SetButtonInteractable(_level3Button, userData.Level2.IsCleared);
+
+        ApplyLevelStars(_level1Button, userData.Level1.Star);
+        ApplyLevelStars(_level2Button, userData.Level2.Star);
+        ApplyLevelStars(_level3Button, userData.Level3.Star);
+    }
+
+    private static void ApplyLevelStars(Button levelButton, int starCount)
+    {
+        if (levelButton == null)
+            return;
+
+        Transform starsRoot = levelButton.transform.Find("Stars");
+        if (starsRoot == null)
+            return;
+
+        int activeCount = Mathf.Clamp(starCount, 0, starsRoot.childCount);
+        for (int i = 0; i < starsRoot.childCount; i++)
+        {
+            Transform filledStar = starsRoot.GetChild(i).Find("Star");
+            if (filledStar != null)
+                filledStar.gameObject.SetActive(i < activeCount);
+        }
     }
 
     private static void SetButtonInteractable(Button button, bool interactable)
