@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
@@ -58,12 +57,12 @@ public class GameEndUI : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void Show(GameEndData gameEndData, Action<int> onWinStarsCalculated = null) =>
-        ShowInternal(gameEndData, null, onWinStarsCalculated);
+    public void Show(GameEndData gameEndData, int level) =>
+        ShowInternal(gameEndData, level, null);
 
     /// <summary>Play-mode preview. <paramref name="starCount"/> is 1–3 on win, ignored on loss.</summary>
-    public void ShowPreview(bool isWin, int starCount) =>
-        ShowInternal(CreatePreviewData(isWin, starCount), isWin ? Mathf.Clamp(starCount, 1, 3) : 0, null);
+    public void ShowPreview(bool isWin, int starCount, int level) =>
+        ShowInternal(CreatePreviewData(isWin, starCount), level, isWin ? Mathf.Clamp(starCount, 1, 3) : 0);
 
     private static GameEndData CreatePreviewData(bool isWin, int starCount)
     {
@@ -86,11 +85,11 @@ public class GameEndUI : MonoBehaviour
         };
     }
 
-    private void ShowInternal(GameEndData gameEndData, int? forcedStarCount, Action<int> onWinStarsCalculated)
+    private void ShowInternal(GameEndData gameEndData, int level, int? forcedStarCount)
     {
         KillShowSequence();
         gameObject.SetActive(true);
-
+        Time.timeScale = 0f;
         string playTimeLine = $"플레이 타임 : {gameEndData.PlayTimeSeconds:F2}초";
         string spawnLine = $"스폰 횟수 : {gameEndData.SpawnCount}";
         string hitLine = $"명중 횟수 : {gameEndData.HitCount}";
@@ -113,8 +112,8 @@ public class GameEndUI : MonoBehaviour
             }
         }
 
-        if (gameEndData.IsWin && onWinStarsCalculated != null)
-            onWinStarsCalculated.Invoke(stars);
+        if (gameEndData.IsWin)
+            UserDataStore.RecordLevelWin(level, stars);
 
         PrepareStarsForShow(stars);
         _showSequence = DOTween.Sequence().SetUpdate(true);
