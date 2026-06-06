@@ -398,7 +398,9 @@ MonoBehaviour:
   storyText: {fileID: 102161735}
   backgroundImage: {fileID: 1161606043}
   fadePanel: {fileID: 1846834802}
-  demonKingSprite: {fileID: -1988381715342350679, guid: 1bd39ac1915244f4ca5882b5ce54fe04, type: 3}
+  storySprite1: {fileID: -5204175152480106798, guid: 3d529877d4e3f4c40902a8b7394178ac, type: 3}
+  storySprite2: {fileID: 302715035860637059, guid: 4d077e7f0ca8c704fbe9bd827d119b5d, type: 3}
+  storySprite3: {fileID: -1988381715342350679, guid: 1bd39ac1915244f4ca5882b5ce54fe04, type: 3}
   fadeDuration: 1
   textSpeed: 0.05
 --- !u!4 &550423664
