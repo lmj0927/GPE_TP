@@ -17,6 +17,8 @@ public class StoryUI : MonoBehaviour
     private int _currentIndex;
     private Coroutine _showCoroutine;
 
+    public static bool IsShowing { get; private set; }
+
     public void Show()
     {
         if (storyData == null || storyData.Count == 0)
@@ -25,8 +27,9 @@ public class StoryUI : MonoBehaviour
         if (storyDialog == null)
             return;
 
+        IsShowing = true;
         gameObject.SetActive(true);
-
+        Time.timeScale = 0f;
         if (_showCoroutine != null)
             StopCoroutine(_showCoroutine);
 
@@ -50,12 +53,12 @@ public class StoryUI : MonoBehaviour
         BindDialogClick();
 
         _currentIndex = 0;
-        Time.timeScale = 0f;
         DisplayLine(_currentIndex);
         _showCoroutine = null;
     }
     public void Hide()
     {
+        IsShowing = false;
         UnbindDialogClick();
 
         if (storyDialog != null)
@@ -102,6 +105,8 @@ public class StoryUI : MonoBehaviour
 
     private void OnDestroy()
     {
+        IsShowing = false;
+
         if (Time.timeScale == 0f)
             Time.timeScale = 1f;
     }

@@ -4228,6 +4228,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lava
       objectReference: {fileID: 0}
+    - target: {fileID: 9065480045021402500, guid: 25129f12483a9e1478b2a283e8e49e19, type: 3}
+      propertyPath: _riseSpeed
+      value: 0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4531,10 +4535,14 @@ MonoBehaviour:
   _dotSpacing: 3
   _viewportBottomMargin: 0.5
   _initialPoolSize: 48
-  _dotScale: 0.7
-  _baseAlpha: 0.3
-  _minAlpha: 0.3
-  _fadeDistance: 10
+  _patternShiftInterval: 0.3
+  _dotScale: 1
+  _largeScaleMultiplier: 1
+  _mediumScaleMultiplier: 0.7
+  _smallScaleMultiplier: 0.5
+  _baseAlpha: 0.7
+  _minAlpha: 0.1
+  _fadeDistance: 20
   _sortingOrder: 100
   _sortingLayerName: Character
 --- !u!1001 &5655805790104036841

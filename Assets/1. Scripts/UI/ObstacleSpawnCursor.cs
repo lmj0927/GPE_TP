@@ -16,6 +16,7 @@ public sealed class ObstacleSpawnCursor : MonoBehaviour
 
     private readonly Dictionary<ObstacleKind, Texture2D> _cursorTextures = new();
     private readonly Dictionary<ObstacleKind, Vector2> _cursorHotspots = new();
+    private bool _wasBlockedByStory;
 
     private void Awake()
     {
@@ -35,8 +36,24 @@ public sealed class ObstacleSpawnCursor : MonoBehaviour
 
     private void Start()
     {
-        if (_obstacleInput != null)
+        if (_obstacleInput != null && !StoryUI.IsShowing)
             ApplyCursor(_obstacleInput.CurrentObstacleKind);
+    }
+
+    private void LateUpdate()
+    {
+        if (StoryUI.IsShowing)
+        {
+            ResetCursor();
+            _wasBlockedByStory = true;
+            return;
+        }
+
+        if (!_wasBlockedByStory || _obstacleInput == null)
+            return;
+
+        _wasBlockedByStory = false;
+        ApplyCursor(_obstacleInput.CurrentObstacleKind);
     }
 
     private void OnDisable()
@@ -83,6 +100,12 @@ public sealed class ObstacleSpawnCursor : MonoBehaviour
 
     private void ApplyCursor(ObstacleKind kind)
     {
+        if (StoryUI.IsShowing)
+        {
+            ResetCursor();
+            return;
+        }
+
         if (!_cursorTextures.TryGetValue(kind, out Texture2D texture) ||
             !_cursorHotspots.TryGetValue(kind, out Vector2 hotspot))
         {

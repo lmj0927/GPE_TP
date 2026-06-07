@@ -75,11 +75,18 @@ public sealed class SkillCooldownUI : MonoBehaviour
 
         _selectionSequence = DOTween.Sequence()
             .Append(_slotImage.DOColor(peak, _selectEnterDuration).SetEase(Ease.OutCubic))
-            .Append(
-                _slotImage
-                    .DOColor(_originalSlotColor, _pulseDuration)
-                    .SetEase(Ease.InOutSine)
-                    .SetLoops(-1, LoopType.Yoyo));
+            .OnComplete(StartSelectionPulse);
+    }
+
+    private void StartSelectionPulse()
+    {
+        if (!_isSelected || _slotImage == null)
+            return;
+
+        _slotImage
+            .DOColor(_originalSlotColor, _pulseDuration)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(-1, LoopType.Yoyo);
     }
 
     private void KillSelectionTweens()

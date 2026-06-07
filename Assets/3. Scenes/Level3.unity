@@ -1353,7 +1353,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 1.8, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1644,7 +1644,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6631551795210650472, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.size
@@ -4474,6 +4474,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lava
       objectReference: {fileID: 0}
+    - target: {fileID: 9065480045021402500, guid: 25129f12483a9e1478b2a283e8e49e19, type: 3}
+      propertyPath: _riseSpeed
+      value: 0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4601,10 +4605,14 @@ MonoBehaviour:
   _dotSpacing: 3
   _viewportBottomMargin: 0.5
   _initialPoolSize: 48
-  _dotScale: 0.7
-  _baseAlpha: 0.3
-  _minAlpha: 0.3
-  _fadeDistance: 10
+  _patternShiftInterval: 0.3
+  _dotScale: 1
+  _largeScaleMultiplier: 1
+  _mediumScaleMultiplier: 0.7
+  _smallScaleMultiplier: 0.5
+  _baseAlpha: 0.7
+  _minAlpha: 0.1
+  _fadeDistance: 20
   _sortingOrder: 100
   _sortingLayerName: Character
 --- !u!1001 &5655805790104036841
@@ -4674,7 +4682,7 @@ PrefabInstance:
     - target: {fileID: 7011822323414566558, guid: 62a20e9af0cc6d6419ff7edcbd930e49, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: a545bfa6511bb5e42b5a5acf14027e36, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: b6ff802348138bd45a68a3cc5f932971, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

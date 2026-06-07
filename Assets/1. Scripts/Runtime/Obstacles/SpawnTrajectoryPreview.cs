@@ -7,6 +7,7 @@ using UnityEngine;
 public sealed class SpawnTrajectoryPreview : MonoBehaviour
 {
     private const float GameplayPlaneZ = 0f;
+    private const int ScalePatternLength = 4;
 
     [SerializeField] private PlayerObstacleInput _obstacleInput;
     [SerializeField] private PlayerObstacleSpawner _spawner;
@@ -19,8 +20,14 @@ public sealed class SpawnTrajectoryPreview : MonoBehaviour
     [SerializeField, Min(0f)] private float _viewportBottomMargin = 0.5f;
     [SerializeField, Min(1)] private int _initialPoolSize = 48;
 
+    [Header("Pattern Animation")]
+    [SerializeField, Min(0.05f)] private float _patternShiftInterval = 0.15f;
+
     [Header("Dot Appearance")]
     [SerializeField, Min(0.01f)] private float _dotScale = 0.75f;
+    [SerializeField, Min(0.01f)] private float _largeScaleMultiplier = 1f;
+    [SerializeField, Min(0.01f)] private float _mediumScaleMultiplier = 0.65f;
+    [SerializeField, Min(0.01f)] private float _smallScaleMultiplier = 0.35f;
     [SerializeField, Range(0f, 1f)] private float _baseAlpha = 0.8f;
     [SerializeField, Range(0f, 1f)] private float _minAlpha = 0.3f;
     [SerializeField, Min(0.1f)] private float _fadeDistance = 10f;
@@ -29,6 +36,8 @@ public sealed class SpawnTrajectoryPreview : MonoBehaviour
 
     private readonly List<GameObject> _dotPool = new();
     private int _activeDotCount;
+    private int _patternPhase;
+    private float _patternShiftTimer;
     private ObstacleKind _previewKind = (ObstacleKind)(-1);
     private Sprite _runtimeDotSprite;
 
@@ -73,6 +82,14 @@ public sealed class SpawnTrajectoryPreview : MonoBehaviour
 
     private void LateUpdate()
     {
+        AdvancePatternPhase();
+
+        if (StoryUI.IsShowing)
+        {
+            HideAllDots();
+            return;
+        }
+
         if (_previewKind != ObstacleKind.Faller && _previewKind != ObstacleKind.Roller)
             return;
 
@@ -108,6 +125,19 @@ public sealed class SpawnTrajectoryPreview : MonoBehaviour
 
         _previewKind = (ObstacleKind)(-1);
         HideAllDots();
+    }
+
+    private void AdvancePatternPhase()
+    {
+        if (_patternShiftInterval <= 0f)
+            return;
+
+        _patternShiftTimer += Time.deltaTime;
+        while (_patternShiftTimer >= _patternShiftInterval)
+        {
+            _patternShiftTimer -= _patternShiftInterval;
+            _patternPhase = (_patternPhase + 1) % ScalePatternLength;
+        }
     }
 
     private float ResolvePathEndY(Vector2 spawnPosition, ObstacleKind kind)
@@ -154,22 +184,20 @@ public sealed class SpawnTrajectoryPreview : MonoBehaviour
     private void PlaceDotsAlongVertical(Vector2 spawnPosition, float endY)
     {
         _activeDotCount = 0;
-        Vector2 cursor = spawnPosition;
         float step = Mathf.Max(_dotSpacing, 0.05f);
+        float pathLength = spawnPosition.y - endY;
+        int slotIndex = 0;
 
-        while (cursor.y > endY && _activeDotCount < _dotPool.Count)
+        for (float dist = 0f; dist < pathLength; dist += step)
         {
-            ActivateDot(_activeDotCount, cursor, spawnPosition);
-            _activeDotCount++;
-            cursor.y -= step;
-        }
+            if (_activeDotCount >= _dotPool.Count)
+                ExpandPool();
 
-        while (cursor.y > endY)
-        {
-            ExpandPool();
-            ActivateDot(_activeDotCount, cursor, spawnPosition);
+            var worldPosition = new Vector2(spawnPosition.x, spawnPosition.y - dist);
+            int patternIndex = GetShiftedPatternIndex(slotIndex);
+            ActivateDot(_activeDotCount, worldPosition, spawnPosition, patternIndex);
             _activeDotCount++;
-            cursor.y -= step;
+            slotIndex++;
         }
 
         for (int i = _activeDotCount; i < _dotPool.Count; i++)
@@ -179,7 +207,12 @@ public sealed class SpawnTrajectoryPreview : MonoBehaviour
         }
     }
 
-    private void ActivateDot(int index, Vector2 worldPosition, Vector2 spawnPosition)
+    private int GetShiftedPatternIndex(int slotIndex)
+    {
+        return ((slotIndex - _patternPhase) % ScalePatternLength + ScalePatternLength) % ScalePatternLength;
+    }
+
+    private void ActivateDot(int index, Vector2 worldPosition, Vector2 spawnPosition, int patternIndex)
     {
         GameObject dot = _dotPool[index];
         if (dot == null)
@@ -187,7 +220,9 @@ public sealed class SpawnTrajectoryPreview : MonoBehaviour
 
         dot.SetActive(true);
         dot.transform.position = new Vector3(worldPosition.x, worldPosition.y, GameplayPlaneZ);
-        dot.transform.localScale = Vector3.one * _dotScale;
+
+        float scale = _dotScale * GetScaleMultiplier(patternIndex);
+        dot.transform.localScale = Vector3.one * scale;
 
         if (!dot.TryGetComponent(out SpriteRenderer spriteRenderer))
             return;
@@ -199,6 +234,16 @@ public sealed class SpawnTrajectoryPreview : MonoBehaviour
         Color color = spriteRenderer.color;
         color.a = alpha;
         spriteRenderer.color = color;
+    }
+
+    private float GetScaleMultiplier(int patternIndex)
+    {
+        return patternIndex switch
+        {
+            0 => _largeScaleMultiplier,
+            2 => _smallScaleMultiplier,
+            _ => _mediumScaleMultiplier,
+        };
     }
 
     private void HideAllDots()

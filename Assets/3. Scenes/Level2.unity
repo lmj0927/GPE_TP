@@ -899,6 +899,71 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 4, y: 1000}
   m_EdgeRadius: 0
+--- !u!1001 &408155709
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -30.714584
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -19.070562
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946618469661490494, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8165971772135601706, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
+      propertyPath: m_Name
+      value: Circle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9a332d5c56ab8c644b02f03ef6ce9851, type: 3}
 --- !u!1 &468934728
 GameObject:
   m_ObjectHideFlags: 0
@@ -3826,7 +3891,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6631551795210650472, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7984459463115591538, guid: d18fff71eba254149b20567a6c792c8f, type: 3}
       propertyPath: storyData.Array.size
@@ -4324,6 +4389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lava
       objectReference: {fileID: 0}
+    - target: {fileID: 9065480045021402500, guid: 25129f12483a9e1478b2a283e8e49e19, type: 3}
+      propertyPath: _riseSpeed
+      value: 0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4451,10 +4520,14 @@ MonoBehaviour:
   _dotSpacing: 3
   _viewportBottomMargin: 0.5
   _initialPoolSize: 48
-  _dotScale: 0.7
-  _baseAlpha: 0.3
-  _minAlpha: 0.3
-  _fadeDistance: 10
+  _patternShiftInterval: 0.3
+  _dotScale: 1
+  _largeScaleMultiplier: 1
+  _mediumScaleMultiplier: 0.7
+  _smallScaleMultiplier: 0.5
+  _baseAlpha: 0.7
+  _minAlpha: 0.1
+  _fadeDistance: 20
   _sortingOrder: 100
   _sortingLayerName: Character
 --- !u!1001 &5655805790104036841
@@ -4556,3 +4629,4 @@ SceneRoots:
   - {fileID: 3193680939605750562}
   - {fileID: 324948562}
   - {fileID: 1216729703}
+  - {fileID: 408155709}

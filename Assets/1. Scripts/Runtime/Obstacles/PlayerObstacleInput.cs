@@ -58,6 +58,15 @@ public sealed class PlayerObstacleInput : MonoBehaviour
         if (_spawner == null || _camera == null)
             return;
 
+        if (StoryUI.IsShowing)
+        {
+            if (_bouncerDragActive)
+                CancelBouncerDrag();
+
+            SetBouncerAimArrowVisible(false);
+            return;
+        }
+
         HandleModeKeys();
 
         if (_mode != ObstacleSpawnMode.Bouncer && _bouncerDragActive)
