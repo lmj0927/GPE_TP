@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Policies;
@@ -36,6 +37,8 @@ public sealed class GameAgent : Agent, IClimberAgent
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private float _horizontalDeadZone = 0.15f;
+    [SerializeField, Range(0f, 1f)] private float _invincibilityBlinkMinAlpha = 0.2f;
+    [SerializeField, Min(0.01f)] private float _invincibilityBlinkHalfDuration = 0.08f;
 
     private Rigidbody2D _rigidbody;
     private ClimberMotor _motor;
@@ -45,6 +48,8 @@ public sealed class GameAgent : Agent, IClimberAgent
     private ClimberMoveInput _moveInput;
     private bool _isInvincible;
     private bool _gameEnded;
+    private Color _spriteBaseColor;
+    private Tween _invincibilityBlinkTween;
     private int _hitCount;
     private int _health;
     private int _jumpBufferFrames;
@@ -77,6 +82,8 @@ public sealed class GameAgent : Agent, IClimberAgent
             _animator = GetComponentInChildren<Animator>();
         if (_spriteRenderer == null)
             _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (_spriteRenderer != null)
+            _spriteBaseColor = _spriteRenderer.color;
 
         if (_groundCheckOrigin == null)
         {
@@ -120,6 +127,7 @@ public sealed class GameAgent : Agent, IClimberAgent
         _hitCount = 0;
         _moveInput = ClimberMoveInput.Zero;
         _isInvincible = false;
+        StopInvincibilityBlink();
         _jumpBufferFrames = 0;
         _health = MaxHealth;
 
@@ -325,10 +333,12 @@ public sealed class GameAgent : Agent, IClimberAgent
     {
         yield return new WaitForSeconds(_config.HitStunDuration);
         _isInvincible = false;
+        StopInvincibilityBlink();
     }
 
     private void Die()
     {
+        StopInvincibilityBlink();
         _rigidbody.simulated = false;
         TriggerAnimator(DieTriggerHash);
     }
@@ -341,9 +351,38 @@ public sealed class GameAgent : Agent, IClimberAgent
         _moveInput = ClimberMoveInput.Zero;
         _jumpBufferFrames = 0;
         _isInvincible = true;
+        StartInvincibilityBlink();
         TriggerAnimator(StunTriggerHash);
         ChangeState(ClimberStateId.HitStun);
     }
+
+    private void StartInvincibilityBlink()
+    {
+        if (_spriteRenderer == null)
+            return;
+
+        StopInvincibilityBlink();
+        _spriteBaseColor = _spriteRenderer.color;
+
+        _invincibilityBlinkTween = _spriteRenderer
+            .DOFade(_invincibilityBlinkMinAlpha, _invincibilityBlinkHalfDuration)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetUpdate(UpdateType.Late);
+    }
+
+    private void StopInvincibilityBlink()
+    {
+        if (_invincibilityBlinkTween != null && _invincibilityBlinkTween.IsActive())
+            _invincibilityBlinkTween.Kill();
+
+        _invincibilityBlinkTween = null;
+
+        if (_spriteRenderer != null)
+            _spriteRenderer.color = _spriteBaseColor;
+    }
+
+    private void OnDestroy() => StopInvincibilityBlink();
 
     private ClimberMoveInput ReadKeyboardInput()
     {

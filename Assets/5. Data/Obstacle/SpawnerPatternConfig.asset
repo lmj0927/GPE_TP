@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83fe74f7863352a4593d23dec837acae, type: 3}
   m_Name: SpawnerPatternConfig
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerPatternConfig
-  _spawnIntervalSeconds: 1.1
+  _spawnIntervalSeconds: 0.5
   _aimLeadSeconds: 0.4
   _spawnHeightOffset: 30
   _bouncerMinDownTiltDegrees: 30

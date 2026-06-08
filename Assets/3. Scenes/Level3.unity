@@ -4635,6 +4635,10 @@ PrefabInstance:
       propertyPath: _startPoint
       value: 
       objectReference: {fileID: 256031896}
+    - target: {fileID: 2539154762453731964, guid: 62a20e9af0cc6d6419ff7edcbd930e49, type: 3}
+      propertyPath: _invincibilityBlinkHalfDuration
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 3710156023319166260, guid: 62a20e9af0cc6d6419ff7edcbd930e49, type: 3}
       propertyPath: m_Name
       value: GameEnemy
@@ -4682,7 +4686,7 @@ PrefabInstance:
     - target: {fileID: 7011822323414566558, guid: 62a20e9af0cc6d6419ff7edcbd930e49, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: b6ff802348138bd45a68a3cc5f932971, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 6a7a9621667de754191d55826b59c0ab, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
