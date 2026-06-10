@@ -15,6 +15,9 @@ public class MapGenerator : MonoBehaviour
     private Vector3 currentTopPosition;
     [SerializeField] private bool generateOnAwake = false;
 
+    public bool HasEndTemplateWorldY { get; private set; }
+    public float EndTemplateWorldY { get; private set; }
+
     private void Awake()
     {
         EnsureSpawnRoot();
@@ -31,6 +34,8 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateMap()
     {
+        HasEndTemplateWorldY = false;
+
         if (templates == null || templates.Length == 0)
             return;
 
@@ -67,6 +72,12 @@ public class MapGenerator : MonoBehaviour
     {
         if (template == null)
             return;
+
+        if (endTemplate != null && template == endTemplate)
+        {
+            EndTemplateWorldY = currentTopPosition.y;
+            HasEndTemplateWorldY = true;
+        }
 
         Instantiate(template, currentTopPosition, Quaternion.identity, _spawnRoot);
         currentTopPosition += Vector3.up * offsetY;

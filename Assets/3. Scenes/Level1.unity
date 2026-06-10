@@ -4230,7 +4230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9065480045021402500, guid: 25129f12483a9e1478b2a283e8e49e19, type: 3}
       propertyPath: _riseSpeed
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4612,7 +4612,7 @@ PrefabInstance:
     - target: {fileID: 7011822323414566558, guid: 62a20e9af0cc6d6419ff7edcbd930e49, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 4fb16b934c159b24bbff3039ed3a26f3, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 10f23f03efaa9814081d765c5e7a7640, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
