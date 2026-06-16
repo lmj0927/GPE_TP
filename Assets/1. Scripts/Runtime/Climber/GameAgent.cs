@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using Unity.MLAgents;
@@ -61,6 +62,8 @@ public sealed class GameAgent : Agent, IClimberAgent
     public int HitCount => _hitCount;
     public Vector2 WorldPosition => transform.position;
     public Vector2 WorldVelocity => _rigidbody != null ? _rigidbody.linearVelocity : Vector2.zero;
+    public event Action<Vector3> PositionUpdated;
+    public event Action HitTaken;
 
     private bool UsesDirectKeyboardInput =>
         _behaviorParameters != null &&
@@ -247,6 +250,11 @@ public sealed class GameAgent : Agent, IClimberAgent
         UpdateFacingFromMoveInput(_moveInput.Horizontal);
     }
 
+    private void LateUpdate()
+    {
+        PositionUpdated?.Invoke(transform.position);
+    }
+
     private void FixedUpdate()
     {
         if (_gameEnded)
@@ -277,6 +285,8 @@ public sealed class GameAgent : Agent, IClimberAgent
         if (_gameEnded || _stateMachine.CurrentId == ClimberStateId.HitStun)
             return;
 
+        HitTaken?.Invoke();
+        AudioManager.TryPlay(AudioType.Hit);
         _hitCount++;
         ApplyDamage(ObstacleHitDamage);
     }

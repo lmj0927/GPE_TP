@@ -46,7 +46,8 @@ public sealed class RollerObstacle : ObstacleBase
             }
 
             _wasOnPlatform = true;
-            _velocity.x = _rollDirection * tuning.RollSpeed;
+            float rollSpeed = RuntimePrimarySpeed > 0f ? RuntimePrimarySpeed : tuning.RollSpeed;
+            _velocity.x = _rollDirection * rollSpeed;
             _velocity.y = 0f;
 
             float radius = tuning.GroundCheckRadius;
@@ -102,7 +103,8 @@ public sealed class RollerObstacle : ObstacleBase
 
         _rollDirection = -_rollDirection;
         ApplySpriteFlipByRollDirection();
-        _velocity.x = _rollDirection * tuning.RollSpeed;
+        float rollSpeed = RuntimePrimarySpeed > 0f ? RuntimePrimarySpeed : tuning.RollSpeed;
+        _velocity.x = _rollDirection * rollSpeed;
         position = (Vector2)hit.point + hit.normal * (castRadius + tuning.SurfaceSkin);
     }
 

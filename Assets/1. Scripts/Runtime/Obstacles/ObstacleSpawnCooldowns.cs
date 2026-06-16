@@ -6,20 +6,20 @@ using UnityEngine;
 /// </summary>
 public sealed class ObstacleSpawnCooldowns
 {
-    private readonly ObstacleTuningConfig _config;
+    private readonly float[] _cooldownDurations;
     private readonly float[] _readyAt;
 
-    public ObstacleSpawnCooldowns(ObstacleTuningConfig config)
+    public ObstacleSpawnCooldowns(float fallerCooldown, float bouncerCooldown, float rollerCooldown)
     {
-        _config = config;
         _readyAt = new float[Enum.GetValues(typeof(ObstacleKind)).Length];
+        _cooldownDurations = new float[_readyAt.Length];
+        _cooldownDurations[(int)ObstacleKind.Faller] = fallerCooldown;
+        _cooldownDurations[(int)ObstacleKind.Bouncer] = bouncerCooldown;
+        _cooldownDurations[(int)ObstacleKind.Roller] = rollerCooldown;
     }
 
     public bool IsReady(ObstacleKind kind)
     {
-        if (_config == null)
-            return false;
-
         return Time.time >= _readyAt[(int)kind];
     }
 
@@ -30,16 +30,13 @@ public sealed class ObstacleSpawnCooldowns
 
     public float CooldownDuration(ObstacleKind kind)
     {
-        return _config != null ? _config.GetSpawnCooldown(kind) : 0f;
+        return _cooldownDurations[(int)kind];
     }
 
     /// <summary>Starts cooldown after a successful spawn.</summary>
     public void CommitSpawn(ObstacleKind kind)
     {
-        if (_config == null)
-            return;
-
-        _readyAt[(int)kind] = Time.time + _config.GetSpawnCooldown(kind);
+        _readyAt[(int)kind] = Time.time + _cooldownDurations[(int)kind];
     }
 
     public void ResetAll()

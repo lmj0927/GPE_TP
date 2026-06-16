@@ -46,6 +46,7 @@ public sealed class ObstaclePool : MonoBehaviour
         ObstacleKind kind,
         Vector2 worldPosition,
         float playerAimWorldX,
+        float runtimePrimarySpeed,
         IClimberAgent targetClimber = null,
         Vector2? launchDirection = null)
     {
@@ -57,7 +58,7 @@ public sealed class ObstaclePool : MonoBehaviour
 
         var obstacle = pool.Rent();
         obstacle.BindPool(Release);
-        obstacle.Activate(worldPosition, playerAimWorldX, targetClimber, launchDirection);
+        obstacle.Activate(worldPosition, playerAimWorldX, runtimePrimarySpeed, targetClimber, launchDirection);
         return obstacle;
     }
 

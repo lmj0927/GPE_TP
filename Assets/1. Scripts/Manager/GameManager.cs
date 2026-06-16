@@ -31,6 +31,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
+        AudioManager.TryPlay(AudioType.Play);
         TryShowLevelStory();
     }
 
@@ -60,6 +61,8 @@ public class GameManager : Singleton<GameManager>
 
         _runEnded = true;
         Time.timeScale = 1f;
+
+        AudioManager.TryPlay(isWin ? AudioType.Win : AudioType.Lose);
 
         PlayTimeSeconds = Time.time - _runStartTime;
 

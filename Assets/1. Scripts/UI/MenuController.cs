@@ -24,6 +24,8 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
+        AudioManager.TryPlay(AudioType.Main);
+
         // 처음 시작할 때(isIntroDone이 false일 때)
         if (isIntroDone == false)
         {
@@ -66,8 +68,8 @@ public class MenuController : MonoBehaviour
         UserData userData = UserDataStore.Load();
 
         SetButtonInteractable(_level1Button, true);
-        SetButtonInteractable(_level2Button, userData.Level1.IsCleared);
-        SetButtonInteractable(_level3Button, userData.Level2.IsCleared);
+        SetButtonInteractable(_level2Button, userData.Level1.Star > 0);
+        SetButtonInteractable(_level3Button, userData.Level2.Star > 0);
 
         ApplyLevelStars(_level1Button, userData.Level1.Star);
         ApplyLevelStars(_level2Button, userData.Level2.Star);

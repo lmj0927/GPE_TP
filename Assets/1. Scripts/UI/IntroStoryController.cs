@@ -39,6 +39,8 @@ public class IntroStoryController : MonoBehaviour
 
     void Start()
     {
+        AudioManager.TryPlay(AudioType.Intro);
+
         // 시작할 때 첫 번째 사진을 기본으로 깔아줍니다.
         if (storySprite1 != null)
         {

@@ -17,12 +17,15 @@ public sealed class PlayerObstacleSpawner : MonoBehaviour
 
     private ObstacleSpawnCooldowns _cooldowns;
     private int _spawnCount;
+    private float _fallerSpeed;
+    private float _bouncerSpeed;
+    private float _rollerSpeed;
 
     public int SpawnCount => _spawnCount;
 
     private void Awake()
     {
-        _cooldowns = new ObstacleSpawnCooldowns(_tuning);
+        CacheUpgradeAdjustedTuning();
     }
 
     public bool IsKindAllowed(ObstacleKind kind)
@@ -61,12 +64,19 @@ public sealed class PlayerObstacleSpawner : MonoBehaviour
         if (!IsKindAllowed(kind) || _obstaclePool == null || _cooldowns == null || !_cooldowns.IsReady(kind))
             return false;
 
-        var obstacle = _obstaclePool.Rent(kind, worldPosition, playerAimWorldX, targetClimber, launchDirection);
+        var obstacle = _obstaclePool.Rent(
+            kind,
+            worldPosition,
+            playerAimWorldX,
+            GetRuntimeSpeed(kind),
+            targetClimber,
+            launchDirection);
         if (obstacle == null)
             return false;
 
         _cooldowns.CommitSpawn(kind);
         _spawnCount++;
+        AudioManager.TryPlay(AudioType.Spawn);
         return true;
     }
 
@@ -78,5 +88,40 @@ public sealed class PlayerObstacleSpawner : MonoBehaviour
     {
         ReleaseAllActiveObstacles();
         ResetCooldowns();
+    }
+
+    private void CacheUpgradeAdjustedTuning()
+    {
+        if (_tuning == null)
+            return;
+
+        UserData data = UserDataStore.Load();
+        int up1 = Mathf.Clamp(data.Upgrade1, 0, 10);
+        int up2 = Mathf.Clamp(data.Upgrade2, 0, 10);
+        int up3 = Mathf.Clamp(data.Upgrade3, 0, 10);
+
+        _fallerSpeed = _tuning.Faller.FallSpeed + _tuning.Faller.FallSpeedPerUpgradeLevel * up1;
+        _bouncerSpeed = _tuning.Bouncer.LaunchSpeed + _tuning.Bouncer.LaunchSpeedPerUpgradeLevel * up2;
+        _rollerSpeed = _tuning.Roller.RollSpeed + _tuning.Roller.RollSpeedPerUpgradeLevel * up3;
+
+        float fallerCooldown = _tuning.Faller.SpawnCooldownSeconds -
+                               _tuning.Faller.SpawnCooldownDecreasePerUpgradeLevel * up1;
+        float bouncerCooldown = _tuning.Bouncer.SpawnCooldownSeconds -
+                                _tuning.Bouncer.SpawnCooldownDecreasePerUpgradeLevel * up2;
+        float rollerCooldown = _tuning.Roller.SpawnCooldownSeconds -
+                               _tuning.Roller.SpawnCooldownDecreasePerUpgradeLevel * up3;
+
+        _cooldowns = new ObstacleSpawnCooldowns(fallerCooldown, bouncerCooldown, rollerCooldown);
+    }
+
+    private float GetRuntimeSpeed(ObstacleKind kind)
+    {
+        return kind switch
+        {
+            ObstacleKind.Faller => _fallerSpeed,
+            ObstacleKind.Bouncer => _bouncerSpeed,
+            ObstacleKind.Roller => _rollerSpeed,
+            _ => 0f
+        };
     }
 }

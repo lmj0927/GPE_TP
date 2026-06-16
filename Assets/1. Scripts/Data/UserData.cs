@@ -7,10 +7,11 @@ public class LevelProgress
 {
     /// <summary>false = 해당 레벨 최초 진입(스토리 미표시), true = 이미 진입한 적 있음.</summary>
     public bool IsFirstEntry;
-    public bool IsCleared;
 
     /// <summary>0 = 미클리어, 1–3 = 최고 달성 별 개수.</summary>
     public int Star;
+
+    public bool IsCleared => Star > 0;
 }
 
 [Serializable]
@@ -19,6 +20,10 @@ public class UserData
     public LevelProgress Level1 = new();
     public LevelProgress Level2 = new();
     public LevelProgress Level3 = new();
+    public int Upgrade1;
+    public int Upgrade2;
+    public int Upgrade3;
+    public int currency;
 
     public LevelProgress GetLevel(int level)
     {
@@ -48,17 +53,24 @@ public static class UserDataPrefsKeys
     public const string Prefix = "UserData_";
 
     public static string LevelFirstEntry(int level) => $"{Prefix}Level{level}_FirstEntry";
-    public static string LevelCleared(int level) => $"{Prefix}Level{level}_Cleared";
     public static string LevelStar(int level) => $"{Prefix}Level{level}_Star";
+    public static string Currency => $"{Prefix}Currency";
+    public static string Upgrade1 => $"{Prefix}Upgrade1";
+    public static string Upgrade2 => $"{Prefix}Upgrade2";
+    public static string Upgrade3 => $"{Prefix}Upgrade3";
 
     public static IEnumerable<string> GetAllManagedKeys()
     {
         for (int level = 1; level <= 3; level++)
         {
             yield return LevelFirstEntry(level);
-            yield return LevelCleared(level);
             yield return LevelStar(level);
         }
+
+        yield return Currency;
+        yield return Upgrade1;
+        yield return Upgrade2;
+        yield return Upgrade3;
     }
 }
 
@@ -73,11 +85,14 @@ public static class UserDataStore
             data.SetLevel(level, new LevelProgress
             {
                 IsFirstEntry = ReadBool(UserDataPrefsKeys.LevelFirstEntry(level)),
-                IsCleared = ReadBool(UserDataPrefsKeys.LevelCleared(level)),
                 Star = ReadStar(UserDataPrefsKeys.LevelStar(level))
             });
         }
 
+        data.currency = ReadCurrency(UserDataPrefsKeys.Currency);
+        data.Upgrade1 = ReadUpgrade(UserDataPrefsKeys.Upgrade1);
+        data.Upgrade2 = ReadUpgrade(UserDataPrefsKeys.Upgrade2);
+        data.Upgrade3 = ReadUpgrade(UserDataPrefsKeys.Upgrade3);
         return data;
     }
 
@@ -87,10 +102,13 @@ public static class UserDataStore
         {
             var progress = data.GetLevel(level);
             WriteBool(UserDataPrefsKeys.LevelFirstEntry(level), progress.IsFirstEntry);
-            WriteBool(UserDataPrefsKeys.LevelCleared(level), progress.IsCleared);
             WriteStar(UserDataPrefsKeys.LevelStar(level), progress.Star);
         }
 
+        WriteCurrency(UserDataPrefsKeys.Currency, data.currency);
+        WriteUpgrade(UserDataPrefsKeys.Upgrade1, data.Upgrade1);
+        WriteUpgrade(UserDataPrefsKeys.Upgrade2, data.Upgrade2);
+        WriteUpgrade(UserDataPrefsKeys.Upgrade3, data.Upgrade3);
         PlayerPrefs.Save();
     }
 
@@ -104,10 +122,19 @@ public static class UserDataStore
 
         var data = Load();
         var progress = data.GetLevel(level);
-        progress.IsCleared = true;
         progress.Star = Mathf.Max(progress.Star, Mathf.Clamp(starCount, 0, 3));
 
         data.SetLevel(level, progress);
+        Save(data);
+    }
+
+    public static void AddCurrency(int amount)
+    {
+        if (amount <= 0)
+            return;
+
+        var data = Load();
+        data.currency = Mathf.Max(0, data.currency + amount);
         Save(data);
     }
 
@@ -155,4 +182,16 @@ public static class UserDataStore
 
     private static void WriteStar(string key, int star) =>
         PlayerPrefs.SetInt(key, Mathf.Clamp(star, 0, 3));
+
+    private static int ReadCurrency(string key) =>
+        Mathf.Max(0, PlayerPrefs.GetInt(key, 0));
+
+    private static void WriteCurrency(string key, int amount) =>
+        PlayerPrefs.SetInt(key, Mathf.Max(0, amount));
+
+    private static int ReadUpgrade(string key) =>
+        Mathf.Clamp(PlayerPrefs.GetInt(key, 0), 0, 10);
+
+    private static void WriteUpgrade(string key, int amount) =>
+        PlayerPrefs.SetInt(key, Mathf.Clamp(amount, 0, 10));
 }

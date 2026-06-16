@@ -18,7 +18,7 @@ public sealed class FallerObstacle : ObstacleBase
         if (Tuning == null)
             return;
 
-        float speed = Tuning.Faller.FallSpeed;
+        float speed = RuntimePrimarySpeed > 0f ? RuntimePrimarySpeed : Tuning.Faller.FallSpeed;
         var position = (Vector2)transform.position;
         position.y -= speed * deltaTime;
 

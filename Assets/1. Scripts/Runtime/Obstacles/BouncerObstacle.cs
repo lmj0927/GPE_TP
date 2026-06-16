@@ -34,7 +34,7 @@ public sealed class BouncerObstacle : ObstacleBase
             
 
         var tuning = Tuning.Bouncer;
-        _speed = tuning.LaunchSpeed;
+        _speed = RuntimePrimarySpeed > 0f ? RuntimePrimarySpeed : tuning.LaunchSpeed;
 
         if (SpawnLaunchDirection is { } launchDirection && launchDirection.sqrMagnitude > 0.0001f)
             _direction = launchDirection.normalized;

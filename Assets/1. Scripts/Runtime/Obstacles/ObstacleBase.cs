@@ -13,6 +13,7 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
     private Rigidbody2D _rigidbody;
     private bool _hitConsumed;
     private float _playerAimWorldX;
+    private float _runtimePrimarySpeed;
     private IClimberAgent _targetClimber;
     private Vector2? _spawnLaunchDirection;
     private Action<ObstacleBase> _releaseToPool;
@@ -22,6 +23,7 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
     protected ObstacleTuningConfig Tuning => _tuning;
     protected Rigidbody2D Rigidbody => _rigidbody;
     protected float PlayerAimWorldX => _playerAimWorldX;
+    protected float RuntimePrimarySpeed => _runtimePrimarySpeed;
     protected IClimberAgent TargetClimber => _targetClimber;
     protected Vector2? SpawnLaunchDirection => _spawnLaunchDirection;
 
@@ -48,6 +50,7 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
         _releaseToPool = null;
         _hitConsumed = false;
         _targetClimber = null;
+        _runtimePrimarySpeed = 0f;
         _spawnLaunchDirection = null;
 
         if (_rigidbody != null)
@@ -57,10 +60,12 @@ public abstract class ObstacleBase : MonoBehaviour, IPoolable
     public void Activate(
         Vector2 worldPosition,
         float playerAimWorldX,
+        float runtimePrimarySpeed,
         IClimberAgent targetClimber = null,
         Vector2? launchDirection = null)
     {
         _playerAimWorldX = playerAimWorldX;
+        _runtimePrimarySpeed = runtimePrimarySpeed;
         _targetClimber = targetClimber;
         _spawnLaunchDirection = launchDirection;
         _hitConsumed = false;

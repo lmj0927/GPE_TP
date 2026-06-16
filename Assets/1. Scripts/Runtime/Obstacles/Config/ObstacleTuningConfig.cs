@@ -34,9 +34,13 @@ public sealed class ObstacleTuningConfig : ScriptableObject
     {
         [SerializeField] private float _fallSpeed = 10f;
         [SerializeField] private float _spawnCooldownSeconds = 0.8f;
+        [SerializeField] private float _fallSpeedPerUpgradeLevel = 0.1f;
+        [SerializeField] private float _spawnCooldownDecreasePerUpgradeLevel = 0.1f;
 
         public float FallSpeed => _fallSpeed;
         public float SpawnCooldownSeconds => _spawnCooldownSeconds;
+        public float FallSpeedPerUpgradeLevel => _fallSpeedPerUpgradeLevel;
+        public float SpawnCooldownDecreasePerUpgradeLevel => _spawnCooldownDecreasePerUpgradeLevel;
     }
 
     [Serializable]
@@ -50,6 +54,8 @@ public sealed class ObstacleTuningConfig : ScriptableObject
         [SerializeField] private float _wallBounceDamping = 1f;
         [SerializeField] private float _spawnCooldownSeconds = 2f;
         [SerializeField, Range(0f, 89f)] private float _minLaunchDownAngleFromHorizontalDegrees = 15f;
+        [SerializeField] private float _launchSpeedPerUpgradeLevel = 0.2f;
+        [SerializeField] private float _spawnCooldownDecreasePerUpgradeLevel = 0.2f;
 
         public float LaunchSpeed => _launchSpeed;
         public float MinLaunchDownAngleFromHorizontalDegrees => _minLaunchDownAngleFromHorizontalDegrees;
@@ -59,6 +65,8 @@ public sealed class ObstacleTuningConfig : ScriptableObject
         public float SurfaceSkin => _surfaceSkin;
         public float WallBounceDamping => _wallBounceDamping;
         public float SpawnCooldownSeconds => _spawnCooldownSeconds;
+        public float LaunchSpeedPerUpgradeLevel => _launchSpeedPerUpgradeLevel;
+        public float SpawnCooldownDecreasePerUpgradeLevel => _spawnCooldownDecreasePerUpgradeLevel;
     }
 
     [Serializable]
@@ -73,6 +81,8 @@ public sealed class ObstacleTuningConfig : ScriptableObject
         [SerializeField] private LayerMask _wallLayers;
         [SerializeField] private float _surfaceSkin = 0.02f;
         [SerializeField] private float _spawnCooldownSeconds = 3f;
+        [SerializeField] private float _rollSpeedPerUpgradeLevel = 0.1f;
+        [SerializeField] private float _spawnCooldownDecreasePerUpgradeLevel = 0.3f;
 
         public float RollSpeed => _rollSpeed;
         public float GravityScale => _gravityScale;
@@ -83,5 +93,7 @@ public sealed class ObstacleTuningConfig : ScriptableObject
         public LayerMask WallLayers => _wallLayers;
         public float SurfaceSkin => _surfaceSkin;
         public float SpawnCooldownSeconds => _spawnCooldownSeconds;
+        public float RollSpeedPerUpgradeLevel => _rollSpeedPerUpgradeLevel;
+        public float SpawnCooldownDecreasePerUpgradeLevel => _spawnCooldownDecreasePerUpgradeLevel;
     }
 }

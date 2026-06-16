@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 2891c221594ca8d488282f69d78dbe59
+guid: efb3e80136c504b4bbbece9dc4d6a5d3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3348055043534039561
-    second: KakaoTalk_20260529_213739504_0
+      213: 7432844144301801400
+    second: ShopPanel_0
+  - first:
+      213: -548038576150251398
+    second: ShopPanel_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,6 +100,19 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -113,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: KakaoTalk_20260529_213739504_0
+      name: ShopPanel_0
       rect:
         serializedVersion: 2
-        x: 54
-        y: 55
-        width: 113
-        height: 124
+        x: 40
+        y: 6
+        width: 723
+        height: 936
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +144,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 90a2d46c25ea67e20800000000000000
-      internalID: 3348055043534039561
+      spriteID: 8bf73fb4e54c62760800000000000000
+      internalID: 7432844144301801400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShopPanel_1
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 11
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a787a5191d9f468f0800000000000000
+      internalID: -548038576150251398
       vertices: []
       indices: 
       edges: []
@@ -148,7 +186,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      KakaoTalk_20260529_213739504_0: 3348055043534039561
+      ShopPanel_0: 7432844144301801400
+      ShopPanel_1: -548038576150251398
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

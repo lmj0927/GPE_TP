@@ -7,14 +7,15 @@ using UnityEngine.SceneManagement;
 
 public class GameEndUI : MonoBehaviour
 {
-    private const float TimeSecondsSlow = 180f;
-    private const float TimeSecondsFast = 60f;
-    private const float TimeScoreAtSlow = 55f;
-    private const float TimeScoreAtFast = 185f;
-    private const float AccuracyAvg = 0.05f;
-    private const float AccuracyHigh = 0.30f;
-    private const float AccScoreAtAvg = 25f;
-    private const float AccScoreAtHigh = 50f;
+    private const float TimeBestSeconds = 30f;
+    private const float TimeReferenceSeconds = 60f;
+    private const float TimeScoreAtBest = 180f;
+    private const float TimeScoreAtReference = 102.5f;
+
+    private const int SpawnBestCount = 30;
+    private const int SpawnReferenceCount = 70;
+    private const float SpawnScoreAtBest = 180f;
+    private const float SpawnScoreAtReference = 102.5f;
 
     [Header("Animation")]
     [SerializeField] private float _popupSlideOffsetY = 900f;
@@ -22,15 +23,19 @@ public class GameEndUI : MonoBehaviour
     [SerializeField] private float _starPopDuration = 0.35f;
     [SerializeField] private float _starPopStagger = 0.1f;
     [SerializeField] private float _textTypingSpeed = 0.025f;
+    [SerializeField] private float _currencyPopDuration = 0.3f;
+    [SerializeField] private float _exitButtonPopDuration = 0.3f;
 
     [SerializeField] private RectTransform _gameEndPopUpUI;
     [SerializeField] private TMP_Text _gameResultText;
     [SerializeField] private TMP_Text _playTimeText;
     [SerializeField] private TMP_Text _spawnCountText;
     [SerializeField] private TMP_Text _hitCountText;
+    [SerializeField] private Image _currencyIcon;
+    [SerializeField] private TMP_Text _currencyText;
     [SerializeField] private Button _exitButton;
     [SerializeField] private List<Image> _starImages;
-    [SerializeField] private List<float> _scorePerStar = new() { 70f, 190f };
+    private List<float> _scorePerStar = new() { 200f, 350f };
 
     private Vector2 _popupRestAnchoredPosition;
     private Sequence _showSequence;
@@ -79,9 +84,9 @@ public class GameEndUI : MonoBehaviour
 
         return starCount switch
         {
-            3 => new GameEndData { IsWin = true, PlayTimeSeconds = 60f, SpawnCount = 150, HitCount = 5 },
-            2 => new GameEndData { IsWin = true, PlayTimeSeconds = 120f, SpawnCount = 80, HitCount = 5 },
-            _ => new GameEndData { IsWin = true, PlayTimeSeconds = 180f, SpawnCount = 150, HitCount = 5 }
+            3 => new GameEndData { IsWin = true, PlayTimeSeconds = 30f, SpawnCount = 30, HitCount = 5 },
+            2 => new GameEndData { IsWin = true, PlayTimeSeconds = 60f, SpawnCount = 70, HitCount = 5 },
+            _ => new GameEndData { IsWin = true, PlayTimeSeconds = 120f, SpawnCount = 100, HitCount = 5 }
         };
     }
 
@@ -95,7 +100,10 @@ public class GameEndUI : MonoBehaviour
         string hitLine = $"명중 횟수 : {gameEndData.HitCount}";
 
         _gameResultText.text = gameEndData.IsWin ? "승리" : "패배";
-        SetTextEmpty(_playTimeText, _spawnCountText, _hitCountText);
+        SetTextEmpty(_playTimeText, _spawnCountText, _hitCountText, _currencyText);
+        PrepareCurrencyAndExitUI();
+
+        _score = CalculateScore(gameEndData);
 
         int stars = 0;
         if (gameEndData.IsWin)
@@ -107,10 +115,11 @@ public class GameEndUI : MonoBehaviour
             }
             else
             {
-                _score = CalculateScore(gameEndData);
                 stars = CalculateStars(_score);
             }
         }
+
+        UserDataStore.AddCurrency(_score);
 
         if (gameEndData.IsWin)
             UserDataStore.RecordLevelWin(level, stars);
@@ -124,6 +133,7 @@ public class GameEndUI : MonoBehaviour
             AppendStarPop(_showSequence, stars);
 
         AppendStatTextTyping(_showSequence, playTimeLine, spawnLine, hitLine);
+        AppendCurrencyAndExit(_showSequence);
     }
 
     private void AppendPopupSlide(Sequence sequence)
@@ -171,6 +181,49 @@ public class GameEndUI : MonoBehaviour
         sequence.Append(CreateTypingTween(_playTimeText, playTimeLine));
         sequence.Append(CreateTypingTween(_spawnCountText, spawnLine));
         sequence.Append(CreateTypingTween(_hitCountText, hitLine));
+    }
+
+    private void AppendCurrencyAndExit(Sequence sequence)
+    {
+        if (_currencyIcon != null)
+        {
+            _currencyIcon.gameObject.SetActive(true);
+            _currencyIcon.rectTransform.localScale = Vector3.zero;
+            sequence.Append(
+                _currencyIcon.rectTransform
+                    .DOScale(Vector3.one, _currencyPopDuration)
+                    .SetEase(Ease.OutBack));
+        }
+
+        if (_currencyText != null)
+        {
+            string currencyLine = _score >= 0 ? $"+ {_score}" : _score.ToString();
+            sequence.Append(CreateTypingTween(_currencyText, currencyLine));
+        }
+
+        if (_exitButton != null)
+        {
+            sequence.AppendCallback(() => _exitButton.gameObject.SetActive(true));
+            sequence.Append(
+                _exitButton.transform
+                    .DOScale(Vector3.one, _exitButtonPopDuration)
+                    .SetEase(Ease.OutBack));
+        }
+    }
+
+    private void PrepareCurrencyAndExitUI()
+    {
+        if (_currencyIcon != null)
+        {
+            _currencyIcon.gameObject.SetActive(false);
+            _currencyIcon.rectTransform.localScale = Vector3.one;
+        }
+
+        if (_exitButton != null)
+        {
+            _exitButton.gameObject.SetActive(false);
+            _exitButton.transform.localScale = Vector3.zero;
+        }
     }
 
     private Tween CreateTypingTween(TMP_Text textComponent, string fullText)
@@ -231,19 +284,17 @@ public class GameEndUI : MonoBehaviour
 
     private int CalculateScore(GameEndData data)
     {
-        float accuracy = (float)data.HitCount / Mathf.Max(1, data.SpawnCount);
-
         float timeScore = Mathf.Lerp(
-            TimeScoreAtSlow,
-            TimeScoreAtFast,
-            Mathf.InverseLerp(TimeSecondsSlow, TimeSecondsFast, data.PlayTimeSeconds));
+            TimeScoreAtReference,
+            TimeScoreAtBest,
+            Mathf.InverseLerp(TimeReferenceSeconds, TimeBestSeconds, data.PlayTimeSeconds));
 
-        float accScore = Mathf.Lerp(
-            AccScoreAtAvg,
-            AccScoreAtHigh,
-            Mathf.InverseLerp(AccuracyAvg, AccuracyHigh, accuracy));
+        float spawnScore = Mathf.Lerp(
+            SpawnScoreAtReference,
+            SpawnScoreAtBest,
+            Mathf.InverseLerp(SpawnReferenceCount, SpawnBestCount, data.SpawnCount));
 
-        int score = Mathf.RoundToInt(timeScore + accScore);
+        int score = Mathf.RoundToInt(timeScore + spawnScore);
 
         if (data.IsWin)
             return score;
