@@ -12,8 +12,8 @@ public class GameEndUI : MonoBehaviour
     private const float TimeScoreAtBest = 180f;
     private const float TimeScoreAtReference = 102.5f;
 
-    private const int SpawnBestCount = 30;
-    private const int SpawnReferenceCount = 70;
+    private const int SpawnBestCount = 70;
+    private const int SpawnReferenceCount = 150;
     private const float SpawnScoreAtBest = 180f;
     private const float SpawnScoreAtReference = 102.5f;
 

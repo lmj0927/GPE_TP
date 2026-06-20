@@ -850,11 +850,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a56e8685243c9e49adb67f9532b9a19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FollowCamera
-  target: {fileID: 2447641991119489629}
+  target: {fileID: 7915805369425334481}
   offset: {x: 0, y: 11, z: -10}
-  _mapGenerator: {fileID: 0}
-  _followSmoothTime: 0.12
-  _hitShakeVibrato: 5
+  _mapGenerator: {fileID: 1635305272}
   _hitShakeDuration: 0.1
 --- !u!1 &619394800
 GameObject:

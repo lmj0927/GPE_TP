@@ -19,6 +19,7 @@ public class GameManager : Singleton<GameManager>
     public float PlayTimeSeconds { get; private set; }
     public int SpawnCount { get; private set; }
     public int HitCount { get; private set; }
+    public bool RunEnded => _runEnded;
 
     protected override void Initialize()
     {

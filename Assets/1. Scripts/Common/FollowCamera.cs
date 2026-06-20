@@ -36,6 +36,9 @@ public class FollowCamera : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (IsFollowFrozen)
+            return;
+
         if (!_hasTargetPosition)
             return;
 
@@ -92,14 +95,23 @@ public class FollowCamera : MonoBehaviour
 
     private void OnTargetPositionUpdated(Vector3 worldPosition)
     {
+        if (IsFollowFrozen)
+            return;
+
         _targetWorldPosition = worldPosition;
         _hasTargetPosition = true;
     }
 
     private void OnTargetHitTaken()
     {
+        if (IsFollowFrozen)
+            return;
+
         PlayHitShake();
     }
+
+    private static bool IsFollowFrozen =>
+        GameManager.Instance != null && GameManager.Instance.RunEnded;
 
     private void OnDestroy()
     {
